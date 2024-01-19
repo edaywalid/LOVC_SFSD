@@ -166,6 +166,19 @@ void insert(student s, File *file)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 char *getStudentFromLinkedList(int key, int *blocPosition, int *charPosition, File *file)
 {
 
