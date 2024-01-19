@@ -190,7 +190,7 @@ bool IsMouseInsideTextBox(Rectangle textBox)
 
 void insert_form()
 {
-    student std = {0};
+    student std;
     int labelWidth = MeasureText("000000:", 20);
     int inputWidth = 150;
     int buttonWidth = 80;
@@ -259,10 +259,11 @@ void insert_form()
         std.name = name;
         std.id = atoi(id);
         std.average = atof(avrage);
-        if(std.id  && std.average) {
-        SaveFormData(&std);
+        // if(std.id  && std.average) {
         insert(std, &file);
-        }
+        // insert(std, &file);
+        SaveFormData(&std);
+        // }
     }
 }
 
