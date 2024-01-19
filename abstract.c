@@ -62,6 +62,26 @@ void writeBloc(File *file, int position)
     fwrite(&buffer, sizeof(Buffer), 1, file->file);
 }
 
+char *studentToChar(student s)
+{
+    // Calculate the size needed for the string, including space for the null terminator
+    size_t size = snprintf(NULL, 0, "%d$%s$%f$%d#", s.id, s.name, s.average, s.LogicallyDeleted) + 1;
+
+    // // Allocate memory for the string
+    size = size + countDigits(size) + 1;
+    char *result = malloc(size);
+
+    if (result == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+    // Format the string
+    snprintf(result, size, "%ld|%d$%d$%s$%f#", size, s.id, s.LogicallyDeleted, s.name, s.average);
+
+    return result;
+}
+
 
 
 
@@ -144,19 +164,6 @@ void insert(student s, File *file)
     file->Header.FistFreePosition = charPos;
     free(tmpChar);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 char *getStudentFromLinkedList(int key, int *blocPosition, int *charPosition, File *file)
