@@ -189,6 +189,7 @@ void insert(student s, File *file)
     file->Header.FistFreePosition = charPos;
     free(tmpChar);
 }
+
 int countDigits(int num) {
     int count = 0;
     while (num != 0) {
