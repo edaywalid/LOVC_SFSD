@@ -115,4 +115,23 @@ search:
         studentData[k] = '\0';
         return studentData;
     }
+     else if (atoi(studentData) > key)
+         {
+             // here the insertion will be done before this student
+             // the charPosition is already set to the beginning of the student
+             // the blocPosition is already set to the bloc of the student
+             return "NOT FOUND";
+         }
+
+         if (blocCount <= file->Header.lastBloc)
+         {
+
+             goto search;
+         }
+         else
+         {
+             *blocPosition = file->Header.lastBloc;
+             *charPosition = file->Header.FistFreePosition; // indicate that the student should be inserted at the end of the file
+             return "NOT FOUND";
+         }
 }
