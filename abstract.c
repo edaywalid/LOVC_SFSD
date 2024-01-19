@@ -8,6 +8,7 @@ Buffer buffer;
 void initFile(File *file)
 {
     File newFile;
+    openFile(&newFile, APPEND);
     openFile(&newFile, 'A');
     newFile.Header.firstBloc = 0;
     newFile.Header.lastBloc = 0;
@@ -83,6 +84,50 @@ char *studentToChar(student s)
 }
 
 
+void delete(int key, File *file)
+{
+
+    printf("see if it enters here 1\n");
+    int blocPosition, charPosition;
+    char *str = getStudentFromLinkedList(key, &blocPosition, &charPosition, file);
+    if (strcmp(str, "NOT FOUND") != 0)
+    {
+
+        printf("see if it enters here 2\n");
+        readBloc(file, blocPosition);
+        int k = charPosition;
+
+        while (buffer.charArray[k] != '|')
+        {
+
+            printf("see if it enters here 3\n");
+            k++;
+            if (k == MAX_SIZE)
+            {
+                k = 0;
+                readBloc(file, ++blocPosition);
+            }
+        }
+
+        while (buffer.charArray[k] != '$')
+        {
+            k++;
+            if (k == MAX_SIZE)
+            {
+                k = 0;
+                readBloc(file, ++blocPosition);
+            }
+        }
+        buffer.charArray[++k] = '1';
+        writeBloc(file, blocPosition);
+        printf("Student %d Deleted!\n", key);
+    }
+
+    else
+    {
+        printf("This Id Don't Exicte\n");
+    }
+}
 
 
 void insert(student s, File *file)
