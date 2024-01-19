@@ -9,7 +9,7 @@ File file;
 
 // Declare global variables
 const int screenWidth = 800;
-const int screenHeight = 450;
+const int screenHeight = 800;
 int currentPage = 0;
 bool editMode1 = false;
 bool editMode2 = false;
@@ -23,18 +23,18 @@ char name[50];
 char avrage[50];
 
 student students[12] = {
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
+        { "ALBA",2, 85.5},
+        { "FORCE",1, 92.0},
+        { "ALBA",2, 85.5},
+        { "FORCE",1, 92.0},
+        { "ALBA",2, 85.5},
+        { "FORCE",1, 92.0},
+        { "ALBA",2, 85.5},
+        { "FORCE",1, 92.0},
+        { "ALBA",2, 85.5},
+        { "FORCE",1, 92.0},
+        { "ALBA",2, 85.5},
+        { "FORCE",1, 92.0},
         // Add more student data as needed
     };
 
@@ -434,3 +434,24 @@ int main()
     return 0;
 }
 
+void Drawrecherchetable()
+{
+    GuiLabel((Rectangle){400, 200, 200, 30}, "alba");
+    GuiLabel((Rectangle){300, 120, 200, 30}, "force");
+    GuiLabel((Rectangle){500, 120, 200, 30}, "wow");
+      for (int i = 0; i < 12; i++) {
+        // ID
+        int maxDigits = snprintf(NULL, 0, "%d", students[i].id);
+        char id[maxDigits] ;
+        snprintf(id,sizeof(id),"%d", students[i].id);
+        char avrage[5] ;
+        sprintf(avrage, "%.2f", students[i].average);
+        // printf("%d\n", students[i].id);
+        printf("%s\n", id);
+        GuiTextBox((Rectangle){100, 120+ (i+1) * 40, 200, 30}, id, 10, false);
+        // Name
+        GuiTextBox((Rectangle){300, 120 + (1+i) * 40, 200, 30}, students[i].name, 64, false);
+        // Average
+        GuiTextBox((Rectangle){500, 120 + (1+i) * 40, 200, 30}, avrage, 5, false);
+    }
+}
