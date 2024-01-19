@@ -63,3 +63,47 @@ void writeBloc(File *file, int position)
 }
 
 
+void delete(int key, File *file)
+{
+
+    printf("see if it enters here 1\n");
+    int blocPosition, charPosition;
+    char *str = getStudentFromLinkedList(key, &blocPosition, &charPosition, file);
+    if (strcmp(str, "NOT FOUND") != 0)
+    {
+
+        printf("see if it enters here 2\n");
+        readBloc(file, blocPosition);
+        int k = charPosition;
+
+        while (buffer.charArray[k] != '|')
+        {
+
+            printf("see if it enters here 3\n");
+            k++;
+            if (k == MAX_SIZE)
+            {
+                k = 0;
+                readBloc(file, ++blocPosition);
+            }
+        }
+
+        while (buffer.charArray[k] != '$')
+        {
+            k++;
+            if (k == MAX_SIZE)
+            {
+                k = 0;
+                readBloc(file, ++blocPosition);
+            }
+        }
+        buffer.charArray[++k] = '1';
+        writeBloc(file, blocPosition);
+        printf("Student %d Deleted!\n", key);
+    }
+
+    else
+    {
+        printf("This Id Don't Exicte\n");
+    }
+}
