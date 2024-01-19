@@ -63,6 +63,15 @@ void writeBloc(File *file, int position)
     fwrite(&buffer, sizeof(Buffer), 1, file->file);
 }
 
+int countDigits(int num) {
+    int count = 0;
+    while (num != 0) {
+        num /= 10;
+        ++count;
+    }
+    return count;
+}
+
 char *studentToChar(student s)
 {
     // Calculate the size needed for the string, including space for the null terminator
@@ -82,6 +91,7 @@ char *studentToChar(student s)
 
     return result;
 }
+
 
 
 void delete(int key, File *file)
