@@ -17,35 +17,31 @@ bool editMode3 = false;
 bool editMode4 = false;
 bool editMode5 = false;
 
-
 char id[50];
 char name[50];
 char avrage[50];
 
 student students[12] = {
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        { "Alice",2, 85.5},
-        { "Bob",1, 92.0},
-        // Add more student data as needed
-    };
+    {"Alice", 2, 85.5},
+    {"Bob", 1, 92.0},
+    {"Alice", 2, 85.5},
+    {"Bob", 1, 92.0},
+    {"Alice", 2, 85.5},
+    {"Bob", 1, 92.0},
+    {"Alice", 2, 85.5},
+    {"Bob", 1, 92.0},
+    {"Alice", 2, 85.5},
+    {"Bob", 1, 92.0},
+    {"Alice", 2, 85.5},
+    {"Bob", 1, 92.0},
+    // Add more student data as needed
+};
 
 void SaveFormData(student *formData);
 void insert_form();
 void search_form();
 void delete_form();
 void DrawStudentTable();
-
-
-
 
 // Function to draw content for Page 0
 void home_page()
@@ -111,7 +107,9 @@ void insert_page()
     student std;
     insert_form();
 }
-
+int deleteStatus = 0;     // 0: No action, 1: Successful, 2: Student doesn't exist
+float deleteTimer = 0.0f; // Timer for displaying success or error message
+const float deleteDuration = 5.0f;
 // Function to draw content for Delete
 void delete_page()
 {
@@ -133,6 +131,23 @@ void delete_page()
     }
 
     delete_form();
+
+    if (deleteStatus == 1)
+        DrawText("Successful!", screenWidth / 2 - MeasureText("Successful!", 30) / 2, screenHeight / 2 + 50, 30, GREEN);
+    else if (deleteStatus == 2)
+        DrawText("Student Doesn't Exist!", screenWidth / 2 - MeasureText("Student Doesn't Exist!", 30) / 2, screenHeight / 2 + 50, 30, RED);
+
+    // Update timer
+    if (deleteStatus > 0)
+    {
+        deleteTimer += GetFrameTime();
+
+        if (deleteTimer >= deleteDuration)
+        {
+            deleteStatus = 0; // Reset status after the desired duration
+            deleteTimer = 0.0f;
+        }
+    }
 }
 
 // Function to draw content for Search
@@ -199,7 +214,7 @@ void insert_form()
     GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
 
     // Check if mouse is inside the first text box
-    if (IsMouseInsideTextBox((Rectangle){ labelWidth, 120, inputWidth, 20}))
+    if (IsMouseInsideTextBox((Rectangle){labelWidth, 120, inputWidth, 20}))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -210,7 +225,7 @@ void insert_form()
     }
 
     // Check if mouse is inside the second text box
-    if (IsMouseInsideTextBox((Rectangle){2 * labelWidth + 10 +inputWidth , 120, inputWidth, 25}))
+    if (IsMouseInsideTextBox((Rectangle){2 * labelWidth + 10 + inputWidth, 120, inputWidth, 25}))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -220,7 +235,7 @@ void insert_form()
         }
     }
 
-    if (IsMouseInsideTextBox((Rectangle){ 3 * labelWidth + 10 + 2 * inputWidth , 120, inputWidth, 25}))
+    if (IsMouseInsideTextBox((Rectangle){3 * labelWidth + 10 + 2 * inputWidth, 120, inputWidth, 25}))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -239,16 +254,16 @@ void insert_form()
 
     start += labelWidth + inputWidth + 10;
 
-    rec_label = (Rectangle) {start, 120, labelWidth, 20};
-    rec_input = (Rectangle) {start + labelWidth, 120, inputWidth, 20};
+    rec_label = (Rectangle){start, 120, labelWidth, 20};
+    rec_input = (Rectangle){start + labelWidth, 120, inputWidth, 20};
 
     GuiLabel(rec_label, "Name:");
     GuiTextBox(rec_input, name, 50, editMode2);
 
     start += labelWidth + inputWidth + 10;
 
-    rec_label = (Rectangle) {start, 120, labelWidth, 20};
-    rec_input = (Rectangle) {start + labelWidth, 120, inputWidth, 20};
+    rec_label = (Rectangle){start, 120, labelWidth, 20};
+    rec_input = (Rectangle){start + labelWidth, 120, inputWidth, 20};
 
     GuiLabel(rec_label, "Avrage:");
     GuiTextBox(rec_input, avrage, 50, editMode3);
@@ -259,6 +274,7 @@ void insert_form()
         std.name = name;
         std.id = atoi(id);
         std.average = atof(avrage);
+        std.LogicallyDeleted = 0;
         // if(std.id  && std.average) {
         insert(std, &file);
         // insert(std, &file);
@@ -267,8 +283,7 @@ void insert_form()
     }
 }
 
-
-//Search Form
+// Search Form
 void search_form()
 {
     student std = {0};
@@ -280,14 +295,13 @@ void search_form()
     GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
 
     // Check if mouse is inside the first text box
-    if (IsMouseInsideTextBox((Rectangle){ labelWidth, 120, inputWidth, 20}))
+    if (IsMouseInsideTextBox((Rectangle){labelWidth, 120, inputWidth, 20}))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
             editMode4 = !editMode5; // Toggle edit mode for TextBox 1
         }
     }
-
 
     // Draw text boxes
     int start = 0;
@@ -297,20 +311,21 @@ void search_form()
     GuiTextBox(rec_input, id, 50, editMode1);
 
     // Save button
-    if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_LENS , "")))
+    if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_LENS, "")))
     {
         std.id = atoi(id);
-        if(std.id  && std.average) {
-        SaveFormData(&std);
-        // insert(std);
+        if (std.id && std.average)
+        {
+            SaveFormData(&std);
+            // insert(std);
         }
     }
 }
 
-//Delete Form
+// Delete Form
 void delete_form()
 {
-    student std = {0};
+    int DeleteId;
     int labelWidth = MeasureText("000000:", 20);
     int inputWidth = 620;
     int buttonWidth = 80;
@@ -319,59 +334,130 @@ void delete_form()
     GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
 
     // Check if mouse is inside the first text box
-    if (IsMouseInsideTextBox((Rectangle){ labelWidth, 120, inputWidth, 20}))
+    if (IsMouseInsideTextBox((Rectangle){labelWidth, 120, inputWidth, 20}))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            editMode5 = !editMode5; // Toggle edit mode for TextBox 1
+            editMode1 = !editMode1; // Corrected: Toggle edit mode for TextBox 1
         }
     }
-
 
     // Draw text boxes
     int start = 0;
     Rectangle rec_label = {start, 120, labelWidth, 20};
     Rectangle rec_input = {start + labelWidth, 120, inputWidth, 20};
     GuiLabel(rec_label, "ID:");
-    GuiTextBox(rec_input, id, 50, editMode1);
+    GuiTextBox(rec_input, id, 50, editMode1); // Corrected: Use editMode1 for TextBox
 
+    int timer;
     // Save button
-    if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_CROSS , "")))
+    if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_CROSS, "")))
     {
-        // std.id = atoi(id);
-        if(std.id  && std.average) {
-        // SaveFormData(&std);
-        // delete();
+        int DeleteId = atoi(id);
+        if (DeleteId)
+        {
+            int check = delete (DeleteId, &file);
+
+            if (check)
+            {
+                deleteStatus = 1;   // Set status to successful
+                deleteTimer = 0.0f; // Reset the timer
+            }
+            else
+            {
+                deleteStatus = 2;   // Set status to student doesn't exist
+                deleteTimer = 0.0f; // Reset the timer
+            }
         }
     }
 }
 
-void DrawStudentTable() {
+void DrawStudentTable()
+{
     // Table headers
     GuiLabel((Rectangle){100, 120, 200, 30}, "ID");
     GuiLabel((Rectangle){300, 120, 200, 30}, "Name");
     GuiLabel((Rectangle){500, 120, 200, 30}, "Average");
 
-    // Draw each row of the table
-    for (int i = 0; i < 12; i++) {
-        // ID
-        int maxDigits = snprintf(NULL, 0, "%d", students[i].id);
-        char id[maxDigits] ;
-        snprintf(id,sizeof(id),"%d", students[i].id);
-        char avrage[5] ;
-        sprintf(avrage, "%.2f", students[i].average);
-        // printf("%d\n", students[i].id);
-        printf("%s\n", id);
-        GuiTextBox((Rectangle){100, 120+ (i+1) * 40, 200, 30}, id, 10, false);
+    int Place = 0;
+
+    readBloc(&file, 0);
+    int pos = 0, bloc = 0;
+    int i = 0;
+    int blocCount = 0;
+    while (blocCount <= (&file)->Header.lastBloc)
+    {
+
+        while (blocCount <= (&file)->Header.lastBloc && i < MAX_SIZE && buffer.charArray[i] != '|')
+        {
+
+            i++;
+            if (i == MAX_SIZE)
+            {
+                readBloc((&file), ++blocCount);
+                i = 0;
+            }
+        }
+        if (blocCount > (&file)->Header.lastBloc)
+            break;
+        int k = 0;
+        i++;
+        if (i == MAX_SIZE)
+        {
+            readBloc((&file), ++blocCount);
+            i = 0;
+        }
+
+        char *studentID = malloc(100);
+        while (i < MAX_SIZE && buffer.charArray[i] != '$')
+        {
+            studentID[k++] = buffer.charArray[i++];
+            if (i == MAX_SIZE)
+            {
+                readBloc((&file), ++blocCount);
+                i = 0;
+            }
+        }
+        studentID[k] = '\0';
+
+        if (i < MAX_SIZE - 1 && buffer.charArray[i + 1] == '1' || i == MAX_SIZE - 1 && buffer.charArray[0] == '1')
+        {
+            free(studentID);
+            continue;
+        }
+
+        student x = charToStudent(getStudentFromLinkedList(atoi(studentID), &bloc, &pos, &file));
+        snprintf(id, 15, "%d", x.id);
+        snprintf(avrage, 50, "%.2f", x.average);
+
+        GuiTextBox((Rectangle){100, 120 + (Place + 1) * 40, 200, 30}, id, 10, false);
         // Name
-        GuiTextBox((Rectangle){300, 120 + (1+i) * 40, 200, 30}, students[i].name, 64, false);
+        GuiTextBox((Rectangle){300, 120 + (1 + Place) * 40, 200, 30}, x.name, 64, false);
         // Average
-        GuiTextBox((Rectangle){500, 120 + (1+i) * 40, 200, 30}, avrage, 5, false);
+        GuiTextBox((Rectangle){500, 120 + (1 + Place++) * 40, 200, 30}, avrage, 5, false);
+
+        free(studentID);
+        if (i == MAX_SIZE)
+            i = 0;
     }
 
+    // Draw each row of the table
+    // for (int i = 0; i < 12; i++) {
+    //     // ID
+    //     int maxDigits = snprintf(NULL, 0, "%d", students[i].id);
+    //     char id[maxDigits] ;
+    //     snprintf(id,sizeof(id),"%d", students[i].id);
+    //     char avrage[5] ;
+    //     sprintf(avrage, "%.2f", students[i].average);
+    //     // printf("%d\n", students[i].id);
+    //     printf("%s\n", id);
+    //     GuiTextBox((Rectangle){100, 120+ (i+1) * 40, 200, 30}, id, 10, false);
+    //     // Name
+    //     GuiTextBox((Rectangle){300, 120 + (1+i) * 40, 200, 30}, students[i].name, 64, false);
+    //     // Average
+    //     GuiTextBox((Rectangle){500, 120 + (1+i) * 40, 200, 30}, avrage, 5, false);
+    // }
 }
-
-
 
 void SaveFormData(student *formData)
 {
@@ -387,7 +473,6 @@ void SaveFormData(student *formData)
 int main()
 {
     openFile(&file, 'A');
-    
 
     // Initialization
 
@@ -433,4 +518,3 @@ int main()
 
     return 0;
 }
-
