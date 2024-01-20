@@ -50,7 +50,7 @@ void allocateBloc(File *file);
 char *studentToChar(student s);
 student charToStudent(char *s);
 void insert(student s, File *file);
-void delete(int key, File *file);
+int delete(int key, File *file);
 // BLOC RELATED METHODS
 void initBloc();
 
