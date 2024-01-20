@@ -41,6 +41,10 @@ void search_visualisation(int x) {
             //DrawRectangleRec(rect[i], WHITE);
             drawSoftRectangle((i * screenWidth / 5)+10,460/2,100,100,0.5f,RED);
         }
+
+
+
+
         drawLineBetweenRectangles(rect[0], rect[1]);
         drawLineBetweenRectangles(rect[1], rect[2]);
         drawLineBetweenRectangles(rect[2], rect[3]);
@@ -61,25 +65,6 @@ int main(void) {
       InitWindow(screenWidth, screenHeight, "Line Between Rectangles Example");
 
     SetTargetFPS(60);
-
-    
-    // while (!WindowShouldClose()) {
-    //     // Update
-
-    //     // Draw
-    //     BeginDrawing();
-        
-    //     ClearBackground(RAYWHITE);  // Clear the background
-
-    //     // Draw rectangles
-       
-    //     // Draw line between rectangles
-        
-
-    //     EndDrawing();
-    // }
-
-    // De-Initialization
     CloseWindow();  // Close window and OpenGL context
 
     return 0;
