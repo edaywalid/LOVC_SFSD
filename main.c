@@ -4,13 +4,13 @@
 #include "include/raygui.h"
 #include "include/abstract.h"
 #include <stdbool.h>
-#include <time.h> 
+#include <time.h>
 
 File file;
 
 // Declare global variables
 const int screenWidth = 800;
-const int screenHeight = 800;
+const int screenHeight = 450;
 int currentPage = 0;
 bool editMode1 = false;
 bool editMode2 = false;
@@ -27,20 +27,21 @@ student searchStudent = {0};
 int blocPosition;
 bool activeV = false;
 int step = 0;
-int trainTrans = 0;
-bool trainStatus = false;
 bool trainLeft = false;
 bool trainRight = false;
 bool trainCenter = false;
 bool trainStop = true;
 
-bool blocksStatus = false;
-bool blocksMove = false;
-bool blocksStop = true;
+// float speed = 2.5;
+// float trainTrans = 0;
+// float bolcksTrans = 1;
+// float distance = 0;
+
+int speed = 5;
+int trainTrans = 0;
 int bolcksTrans = 1;
 int distance = 0;
 
-bool searchEnd = false;
 float searchTimer = 0.0f;
 
 void reset()
@@ -48,19 +49,12 @@ void reset()
     step = 0;
     activeV = false;
     trainTrans = 0;
-    trainStatus = false;
     trainLeft = false;
     trainRight = false;
     trainCenter = false;
     trainStop = true;
-
-    blocksStatus = false;
-    //blocksMove = false;
-    //blocksStop = true;
     bolcksTrans = 1;
     distance = 0;
-
-    searchEnd = false;
     searchTimer = 0.0f;
 }
 
@@ -73,7 +67,6 @@ void delete_form();
 void DrawStudentTable();
 void search_visualisation(int blocNum, student std, bool active);
 
-// random
 //  Function to generate a random student
 student generateRandomStudent()
 {
@@ -180,7 +173,9 @@ void insert_page()
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
-    if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
+    // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
+        if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
+
     {
         currentPage = 0;
     }
@@ -229,7 +224,9 @@ void delete_page()
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
-    if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
+    // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
+        if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
+
     {
         currentPage = 0;
     }
@@ -253,7 +250,9 @@ void search_page()
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
-    if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
+    // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
+        if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
+
     {
         currentPage = 0;
     }
@@ -275,7 +274,8 @@ void view_page()
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
-    if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
+    // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
+    if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
     {
         currentPage = 0;
     }
@@ -443,7 +443,6 @@ void search_form()
                 // trainLeft = true;
                 trainStop = false;
                 step = 1;
-                searchEnd = false;
             }
         }
     }
@@ -639,10 +638,9 @@ int main()
     return 0;
 }
 
-
 void search_visualisation(int blocNum, student std, bool active)
 {
-    printf("%d\n", step);
+    // printf("%d\n", step);
 
     int numOfBlocs = file.Header.lastBloc + 1;
     Rectangle blocs[numOfBlocs];
@@ -651,11 +649,11 @@ void search_visualisation(int blocNum, student std, bool active)
     int arrowWidth = 50;
     int maxlength = std.name == NULL ? numOfBlocs * (blockWidth + arrowWidth) : (blocNum) * (blockWidth + arrowWidth);
 
-    // Draw an arrow
-    Vector2 point1 = {screenWidth / 2 + trainTrans, screenHeight / 2};
-    Vector2 point2 = {screenWidth / 2 - 25 + trainTrans, screenHeight / 2 - 50};
-    Vector2 point3 = {screenWidth / 2 + 25 + trainTrans, screenHeight / 2 - 50};
-    DrawTriangle(point3, point2, point1, RED);
+    // // Draw an arrow
+    // Vector2 point1 = {screenWidth / 2 + trainTrans, screenHeight / 2};
+    // Vector2 point2 = {screenWidth / 2 - 25 + trainTrans, screenHeight / 2 - 50};
+    // Vector2 point3 = {screenWidth / 2 + 25 + trainTrans, screenHeight / 2 - 50};
+    // DrawTriangle(point3, point2, point1, RED);
 
     if (step == 0)
     {
@@ -668,64 +666,83 @@ void search_visualisation(int blocNum, student std, bool active)
         step = 2;
     }
 
-    if (step == 2)
-    {
-        // if(!searchEnd) 
-        //blocksMove = false;
-        //blocksStop = true;
-        if (trainLeft)
-        {
-            if (point1.x == (screenWidth - blockWidth) / 2)
-            {
-                trainRight = true;
-                trainLeft = false;
-            }
-            trainTrans -= 1;
-        }
-        if (trainRight)
-        {
-            if (point1.x == (screenWidth + blockWidth) / 2)
-            {
-                trainCenter = true;
-                trainRight = false;
-            }
-            trainTrans += 1;
-        }
-        if (trainCenter)
-        {
-            if (point1.x == (screenWidth) / 2)
-            {
-                trainStop = true;
-                trainCenter = false;
-                trainStatus = true;
-                step = 3;
-            }
-            trainTrans -= 1;
-        }
-        if (trainStop)
-        {
-            trainTrans = 0;
-            if (trainStatus)
-            {
-                //blocksMove = true;
-                //blocksStop = false;
-            }
-            else
-            {
-                //blocksMove = false;
-                ////blocksStop = true;
-            }
-        }
-    }
-
-    if (step == 3)
-    {
-        //blocksMove = true;
-        //blocksStop = false;
-    }
+    // if (step == 2)
+    // {
+    //     if (trainLeft)
+    //     {
+    //         if (point1.x == (screenWidth - blockWidth) / 2)
+    //         {
+    //             trainRight = true;
+    //             trainLeft = false;
+    //         }
+    //         trainTrans -= 1;
+    //     }
+    //     if (trainRight)
+    //     {
+    //         if (point1.x == (screenWidth + blockWidth) / 2)
+    //         {
+    //             trainCenter = true;
+    //             trainRight = false;
+    //         }
+    //         trainTrans += 1;
+    //     }
+    //     if (trainCenter)
+    //     {
+    //         if (point1.x == (screenWidth) / 2)
+    //         {
+    //             trainStop = true;
+    //             trainCenter = false;
+    //         }
+    //         trainTrans -= 1;
+    //     }
+    //     if (trainStop)
+    //     {
+    //         step = 3;
+    //     }
+    // }
 
     if (activeV)
     {
+        // Draw an arrow
+        Vector2 point1 = {screenWidth / 2 + trainTrans, screenHeight / 2};
+        Vector2 point2 = {screenWidth / 2 - 25 + trainTrans, screenHeight / 2 - 50};
+        Vector2 point3 = {screenWidth / 2 + 25 + trainTrans, screenHeight / 2 - 50};
+        DrawTriangle(point3, point2, point1, RED);
+
+        if (step == 2)
+        {
+            if (trainLeft)
+            {
+                if (point1.x == (screenWidth - blockWidth) / 2)
+                {
+                    trainRight = true;
+                    trainLeft = false;
+                }
+                trainTrans -= speed;
+            }
+            if (trainRight)
+            {
+                if (point1.x == (screenWidth + blockWidth) / 2)
+                {
+                    trainCenter = true;
+                    trainRight = false;
+                }
+                trainTrans += speed;
+            }
+            if (trainCenter)
+            {
+                if (point1.x == (screenWidth) / 2)
+                {
+                    trainStop = true;
+                    trainCenter = false;
+                }
+                trainTrans -= speed;
+            }
+            if (trainStop)
+            {
+                step = 3;
+            }
+        }
         for (int i = 0; i < numOfBlocs; i++)
         {
 
@@ -745,94 +762,110 @@ void search_visualisation(int blocNum, student std, bool active)
 
         if (step == 3)
         {
+            if ((int)distance % 200 == 0 && distance > 0)
+            {
+
                 if (distance == maxlength)
                 {
-                    printf("dkhlt\n");
-                    // //blocksMove = false;
-                    // //blocksStop = true;
-                    // trainStatus = false;
-                    trainStop = true;
-                    searchEnd = true;
-                    if (searchStudent.name != NULL && blocNum != 0)
+                    step = 4;
+                    if (std.name != NULL && blocNum > 0)
                     {
-                        if(trainStatus) {
-                        trainLeft = true;
-                        // trainStop = false;
-                        // //blocksMove = false;
-                        //blocksStop = true;
-                        }
-                        if (trainLeft)
-                        {
-                            if (point1.x == (screenWidth - blockWidth) / 2)
-                            {
-                                trainRight = true;
-                                trainLeft = false;
-                                trainStatus = false;
-                            }
-                            trainTrans -= 1;
-                        }
-                        if (trainRight)
-                        {
-                            if (point1.x == (screenWidth + blockWidth) / 2)
-                            {
-                                trainCenter = true;
-                                trainRight = false;
-                            }
-                            trainTrans += 1;
-                        }
-                        if (trainCenter)
-                        {
-                            if (point1.x == (screenWidth) / 2)
-                            {
-                                trainStop = true;
-                                trainCenter = false;
-                                trainStatus = true;
-                            }
-                            trainTrans -= 1;
-                        }
-                        if (trainStop)
-                        {
-                            trainTrans = 0;
-                                //blocksMove = false;
-                                //blocksStop = true;
-                        }
-                    }
-                        if(trainStop) step = 4;
-                }
-                    else if (distance % 200 == 0 && distance > 0 && step != 4)
-                    {
-                        //blocksMove = false;
-                        trainStatus = false;
                         trainLeft = true;
                         trainStop = false;
-                        step = 1;
                     }
                     else
                     {
-                        bolcksTrans -= 1;
-                        distance += 1;
+                        trainLeft = false;
+                        trainStop = true;
                     }
+                }
+                else
+                {
+                    trainLeft = true;
+                    trainStop = false;
+                    step = 1;
+                }
+                bolcksTrans -= speed;
+                distance += speed;
             }
-
-            if (step == 4)
+            else if (!maxlength)
             {
-                    searchTimer += GetFrameTime();
-
-                    if (searchTimer > 5.0f)
-                    {
-                        searchTimer = 0.0f;
-                        reset();
-                    }
-                    else
-                    {
-                        if (std.name != NULL)
-                            DrawText("Successful!", screenWidth / 2 - MeasureText("Successful!", 30) / 2, 350, 30, GREEN);
-                        else
-                            DrawText("Not Found!", screenWidth / 2 - MeasureText("Not Founde!", 30) / 2, 350, 30, RED);
-                    }
+                step = 4;
+                trainLeft = false;
+                trainStop = true;
+            }
+            else
+            {
+                bolcksTrans -= speed;
+                distance += speed;
             }
         }
 
-        DrawRectangleRec((Rectangle){0, 250, 25, 50}, LIGHTGRAY);
-        DrawRectangleRec((Rectangle){775, 250, 25, 50}, LIGHTGRAY);
+        if (step == 4)
+        {
+
+            if (std.name != NULL && blocNum > 0)
+            {
+
+                if (trainLeft)
+                {
+                    if (point1.x == (screenWidth - blockWidth) / 2)
+                    {
+                        trainRight = true;
+                        trainLeft = false;
+                    }
+                    trainTrans -= speed;
+                }
+                if (trainRight)
+                {
+                    if (point1.x == (screenWidth + blockWidth) / 2)
+                    {
+                        trainCenter = true;
+                        trainRight = false;
+                    }
+                    trainTrans += speed;
+                }
+                if (trainCenter)
+                {
+                    if (point1.x == (screenWidth) / 2)
+                    {
+                        trainStop = true;
+
+                        trainCenter = false;
+                    }
+                    trainTrans -= speed;
+                }
+                if (trainStop)
+                {
+                    trainTrans = speed;
+                }
+            }
+            if (trainStop)
+                step = 5;
+        }
+
+        if (step == 5)
+        {
+            searchTimer += GetFrameTime();
+
+            if (searchTimer > 3.0f)
+            {
+                searchTimer = 0.0f;
+                reset();
+            }
+            else
+            {
+                if (std.name != NULL)
+                    DrawText("Successful!", screenWidth / 2 - MeasureText("Successful!", 30) / 2, 350, 30, GREEN);
+                else
+                    DrawText("Not Found!", screenWidth / 2 - MeasureText("Not Founde!", 30) / 2, 350, 30, RED);
+            }
+        }
     }
+
+    DrawRectangleRec((Rectangle){0, 250, 25, 50}, (Color) {244, 244, 244, 245});
+    DrawRectangleRec((Rectangle){775, 250, 25, 50}, (Color) {244, 244, 244, 245});
+    DrawTriangle((Vector2){ 0, 300 },    
+                 (Vector2){ 12.5, 400 },    
+                 (Vector2){ 25, 500}, RED);            
+}
