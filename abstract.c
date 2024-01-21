@@ -94,23 +94,23 @@ char *studentToChar(student s)
 
 
 
-void delete(int key, File *file)
+int delete(int key, File *file)
 {
 
-    printf("see if it enters here 1\n");
+   
     int blocPosition, charPosition;
     char *str = getStudentFromLinkedList(key, &blocPosition, &charPosition, file);
     if (strcmp(str, "NOT FOUND") != 0)
     {
 
-        printf("see if it enters here 2\n");
+       
         readBloc(file, blocPosition);
         int k = charPosition;
 
         while (buffer.charArray[k] != '|')
         {
 
-            printf("see if it enters here 3\n");
+        
             k++;
             if (k == MAX_SIZE)
             {
@@ -130,12 +130,12 @@ void delete(int key, File *file)
         }
         buffer.charArray[++k] = '1';
         writeBloc(file, blocPosition);
-        printf("Student %d Deleted!\n", key);
+        return 1;
     }
 
     else
     {
-        printf("This Id Don't Exicte\n");
+       return 0;
     }
 }
 
@@ -223,7 +223,99 @@ void insert(student s, File *file)
 
 
 
+student charToStudent(char *s)
+{
+    student x;
+    int i = 0;
+    int k = 0;
+    char *tmp = malloc(100);
 
+    // Extract key
+    while (s[i] != '$' && s[i] != '\0')
+    {
+        tmp[k] = s[i++];
+        k++;
+    }
+    tmp[k] = '\0';
+    x.id = atoi(tmp);
+
+    if (s[i] != '$')
+    {
+        // Handle unexpected end of string or missing delimiter ('$')
+        free(tmp);
+        // You may want to add error handling or return a default value
+        x.id = 0;
+        x.LogicallyDeleted = 0;
+        x.name = NULL;
+        x.average = 0.0;
+        return x;
+    }
+
+    // Reset and move to the next segment
+    k = 0;
+    i++;
+
+    // Extract logically_deleted
+    while (s[i] != '$' && s[i] != '\0')
+    {
+        tmp[k] = s[i++];
+        k++;
+    }
+    tmp[k] = '\0';
+    x.LogicallyDeleted = atoi(tmp);
+
+    if (s[i] != '$')
+    {
+        // Handle unexpected end of string or missing delimiter ('$')
+        free(tmp);
+        // You may want to add error handling or return a default value
+        x.LogicallyDeleted = 0;
+        x.name = NULL;
+        x.average = 0.0;
+        return x;
+    }
+
+    // Reset and move to the next segment
+    k = 0;
+    i++;
+
+    // Extract name
+    while (s[i] != '$' && s[i] != '\0')
+    {
+        tmp[k] = s[i++];
+        k++;
+    }
+    tmp[k] = '\0';
+    x.name = malloc(strlen(tmp) + 1);
+    strcpy(x.name, tmp);
+
+    if (s[i] != '$')
+    {
+        // Handle unexpected end of string or missing delimiter ('$')
+        free(tmp);
+        // You may want to add error handling or return a default value
+        x.name = NULL;
+        x.average = 0.0;
+        return x;
+    }
+
+    // Reset and move to the next segment
+    k = 0;
+    i++;
+
+    // Extract average
+    while (s[i] != '#' && s[i] != '\0')
+    {
+        tmp[k] = s[i++];
+        k++;
+    }
+    tmp[k] = '\0';
+    x.average = atof(tmp);
+
+    free(tmp); // Free the temporary buffer
+
+    return x;
+}
 
 char *getStudentFromLinkedList(int key, int *blocPosition, int *charPosition, File *file)
 {
@@ -316,7 +408,8 @@ search:
          }
          else
          {
-             *blocPosition = file->Header.lastBloc;
+             *blocPosition = file->Header.lastBloc ;
+            //  *blocPosition = -1;
              *charPosition = file->Header.FistFreePosition; // indicate that the student should be inserted at the end of the file
              return "NOT FOUND";
          }
