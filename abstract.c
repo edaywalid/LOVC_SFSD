@@ -404,7 +404,8 @@ search:
          }
          else
          {
-             *blocPosition = file->Header.lastBloc;
+             *blocPosition = file->Header.lastBloc ;
+            //  *blocPosition = -1;
              *charPosition = file->Header.FistFreePosition; // indicate that the student should be inserted at the end of the file
              return "NOT FOUND";
          }
