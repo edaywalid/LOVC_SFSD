@@ -4,7 +4,7 @@
 #include "include/raygui.h"
 #include "include/abstract.h"
 #include <stdbool.h>
-#include <time.h> // Include the time header
+#include <time.h> 
 
 File file;
 
@@ -55,8 +55,8 @@ void reset()
     trainStop = true;
 
     blocksStatus = false;
-    blocksMove = false;
-    blocksStop = true;
+    //blocksMove = false;
+    //blocksStop = true;
     bolcksTrans = 1;
     distance = 0;
 
@@ -210,6 +210,7 @@ void delete_message()
         {
             deleteStatus = 0; // Reset status after the desired duration
             deleteTimer = 0.0f;
+            memset(id, '\0', 10);
         }
     }
 }
@@ -386,8 +387,8 @@ void insert_form()
         }
 
         memset(id, '\0', 10);
-        // memset(name, '\0', 50);
-        // memset(avrage, '\0', 10);
+        memset(name, '\0', 50);
+        memset(avrage, '\0', 10);
     }
 }
 
@@ -590,18 +591,7 @@ void SaveFormData(student *formData)
 int main()
 {
 
-    // Seed the random number generator
-    // srand((unsigned int)time(NULL));
-
     openFile(&file, 'A');
-    // // Generate and print a random student
-    // bool test = true;
-    //             for (int i = 0; i < 5; i++)
-    //         {
-    //             // student randomStudent = generateRandomStudent();
-    //             stdTest.id = i;
-    //             insert(stdTest, &file);
-    //         }
 
     InitWindow(screenWidth, screenHeight, "LOVC");
 
@@ -611,15 +601,6 @@ int main()
     {
 
         // Initialization
-        // if (test)
-        // {
-        //     for (int i = 0; i < 5; i++)
-        //     {
-        //         // student randomStudent = generateRandomStudent();
-        //         stdTest.id = i;
-        //         insert(stdTest, &file);
-        //     }
-        // }
 
         // Main game loop
         // Update
@@ -689,8 +670,8 @@ void search_visualisation(int blocNum, student std, bool active)
     if (step == 2)
     {
         // if(!searchEnd) 
-        blocksMove = false;
-        blocksStop = true;
+        //blocksMove = false;
+        //blocksStop = true;
         if (trainLeft)
         {
             if (point1.x == (screenWidth - blockWidth) / 2)
@@ -725,21 +706,21 @@ void search_visualisation(int blocNum, student std, bool active)
             trainTrans = 0;
             if (trainStatus)
             {
-                blocksMove = true;
-                blocksStop = false;
+                //blocksMove = true;
+                //blocksStop = false;
             }
             else
             {
-                blocksMove = false;
-                blocksStop = true;
+                //blocksMove = false;
+                ////blocksStop = true;
             }
         }
     }
 
     if (step == 3)
     {
-        blocksMove = true;
-        blocksStop = false;
+        //blocksMove = true;
+        //blocksStop = false;
     }
 
     if (activeV)
@@ -763,28 +744,29 @@ void search_visualisation(int blocNum, student std, bool active)
 
         if (step == 3)
         {
-            if (blocksMove)
-            {
                 if (distance == maxlength)
                 {
                     printf("dkhlt\n");
-                    // blocksMove = false;
-                    // blocksStop = true;
+                    // //blocksMove = false;
+                    // //blocksStop = true;
                     // trainStatus = false;
-                    // trainStop = true;
+                    trainStop = true;
                     searchEnd = true;
                     if (searchStudent.name != NULL && blocNum != 0)
                     {
+                        if(trainStatus) {
                         trainLeft = true;
-                        trainStop = false;
-                        blocksMove = false;
-                        blocksStop = true;
+                        // trainStop = false;
+                        // //blocksMove = false;
+                        //blocksStop = true;
+                        }
                         if (trainLeft)
                         {
                             if (point1.x == (screenWidth - blockWidth) / 2)
                             {
                                 trainRight = true;
                                 trainLeft = false;
+                                trainStatus = false;
                             }
                             trainTrans -= 1;
                         }
@@ -810,15 +792,15 @@ void search_visualisation(int blocNum, student std, bool active)
                         if (trainStop)
                         {
                             trainTrans = 0;
-                                blocksMove = false;
-                                blocksStop = true;
+                                //blocksMove = false;
+                                //blocksStop = true;
                         }
                     }
-                        if(blocksStop) step = 4;
+                        if(trainStop) step = 4;
                 }
                     else if (distance % 200 == 0 && distance > 0 && step != 4)
                     {
-                        blocksMove = false;
+                        //blocksMove = false;
                         trainStatus = false;
                         trainLeft = true;
                         trainStop = false;
@@ -829,13 +811,10 @@ void search_visualisation(int blocNum, student std, bool active)
                         bolcksTrans -= 1;
                         distance += 1;
                     }
-                }
             }
 
             if (step == 4)
             {
-                // if (searchEnd)
-                // {
                     searchTimer += GetFrameTime();
 
                     if (searchTimer > 5.0f)
@@ -850,7 +829,6 @@ void search_visualisation(int blocNum, student std, bool active)
                         else
                             DrawText("Not Found!", screenWidth / 2 - MeasureText("Not Founde!", 30) / 2, 350, 30, RED);
                     }
-                // }
             }
         }
 
