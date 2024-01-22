@@ -47,6 +47,12 @@ void closeFile(File *file)
     fclose(file->file);
 }
 
+header readHeader(File *file)
+{
+    fseek(file->file, 0, SEEK_SET);
+    fread(&(file->Header), sizeof(header), 1, file->file);
+}
+
 void readBloc(File *file, int position)
 {
 
