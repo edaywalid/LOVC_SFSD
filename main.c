@@ -30,6 +30,7 @@ float scrollSpeed = 5.0f;
 //Font
 Font customFont;
 Font titleCustomFont;
+Font midCustomFont;
 
 // visualisation
 student searchStudent = {0};
@@ -529,12 +530,12 @@ void delete_form()
 void DrawStudentTable()
 {
 
-        // GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
+        GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
         GuiSetStyle(TEXTBOX, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
 
     // Table headers
-    GuiLabel((Rectangle){100, 120, 50, 30}, "ID");
-    GuiLabel((Rectangle){150, 120, 450, 30}, "Name");
+    GuiLabel((Rectangle){100, 120, 100, 30}, "ID");
+    GuiLabel((Rectangle){200, 120, 400, 30}, "Name");
     GuiLabel((Rectangle){600, 120, 100, 30}, "Average");
 
     int Place = 0;
@@ -606,9 +607,9 @@ void DrawStudentTable()
         snprintf(id, 15, "%d", x.id);
         snprintf(avrage, 50, "%.2f", x.average);
 
-        GuiTextBox((Rectangle){100, 120 + (Place + 1) * 40 - (int)scrollValue, 50, 30}, id, 10, false);
+        GuiTextBox((Rectangle){100, 120 + (Place + 1) * 40 - (int)scrollValue, 100, 30}, id, 10, false);
         // Name
-        GuiTextBox((Rectangle){150, 120 + (1 + Place) * 40 - (int)scrollValue,450 , 30}, x.name, 64, false);
+        GuiTextBox((Rectangle){200, 120 + (1 + Place) * 40 - (int)scrollValue,400 , 30}, x.name, 64, false);
         // Average
         GuiTextBox((Rectangle){600, 120 + (1 + Place++) * 40 - (int)scrollValue, 100, 30}, avrage, 5, false);
 
@@ -642,6 +643,7 @@ int main()
             // Load a custom font (you can replace this with your font file)
     customFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 18, 0, 250);
     titleCustomFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 48, 0, 250);
+    midCustomFont = LoadFontEx("fonts/poppins/Poppins-Regular.ttf", 36, 0, 250);
     // Font customFontTilte = LoadFontEx("fonts/poppins/Poppins-Regular.ttf", 48, 0, 250);
 
     // Set the custom font
@@ -708,7 +710,7 @@ void search_visualisation(int blocNum, student std, bool active)
         for (int i = 0; i < numOfBlocs; i++)
         {
 
-            colorsBlocks[i] = (Color){50, 50, 50, 255};
+            colorsBlocks[i] = (Color){119,119,119,255};
         }
     }
     if (step == 1)
@@ -719,7 +721,7 @@ void search_visualisation(int blocNum, student std, bool active)
         for (int i = 0; i < numOfBlocs; i++)
         {
 
-            colorsBlocks[i] = (Color){192, 192, 192, 255};
+            colorsBlocks[i] = (Color){119,119,119,255};
         }
     }
 
@@ -729,7 +731,8 @@ void search_visualisation(int blocNum, student std, bool active)
         Vector2 point1 = {screenWidth / 2 + trainTrans, screenHeight / 2};
         Vector2 point2 = {screenWidth / 2 - 25 + trainTrans, screenHeight / 2 - 50};
         Vector2 point3 = {screenWidth / 2 + 25 + trainTrans, screenHeight / 2 - 50};
-        DrawTriangle(point3, point2, point1, RED);
+        DrawTriangle(point3, point2, point1, (Color) {162, 29, 29, 255});
+
 
         if (step == 2)
         {
@@ -769,16 +772,16 @@ void search_visualisation(int blocNum, student std, bool active)
             {
                 if (distance / (arrowWidth + blockWidth) == i)
                 {
-                    colorsBlocks[i] = (Color){255, 255, 0, 255};
+                    colorsBlocks[i] = (Color){255, 218, 93, 255};
                     continue;
                 }
                 else if (distance / (arrowWidth + blockWidth) > i)
                 {
-                    colorsBlocks[i] = (Color){255, 0, 0, 255};
+                    colorsBlocks[i] = (Color){162, 29, 29, 255};
                 }
                 else
                 {
-                    colorsBlocks[i] = (Color){50, 50, 50, 255};
+                    colorsBlocks[i] = (Color){119,119,119,255};
                 }
             }
         }
@@ -787,16 +790,16 @@ void search_visualisation(int blocNum, student std, bool active)
 
             if (i != numOfBlocs - 1)
             {
-                Rectangle bodyRect = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + bolcksTrans, 273, 40, 4};
-                DrawRectangleRec(bodyRect, GRAY);
-                Vector2 point1 = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + 40 + bolcksTrans, 270};
-                Vector2 point2 = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + 40 + bolcksTrans, 280};
-                Vector2 point3 = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + 50 + bolcksTrans, 275};
-                DrawTriangle(point1, point2, point3, GRAY);
+                Rectangle bodyRect = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + bolcksTrans, 283, 40, 4};
+                DrawRectangleRec(bodyRect, (Color) {119,119,119,255});
+                Vector2 point1 = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + 40 + bolcksTrans, 280};
+                Vector2 point2 = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + 40 + bolcksTrans, 290};
+                Vector2 point3 = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + 50 + bolcksTrans, 285};
+                DrawTriangle(point1, point2, point3, (Color) {119,119,119,255});
             }
 
-            blocs[i] = (Rectangle){(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + bolcksTrans, 250, blockWidth, 50};
-            DrawRectangleRec(blocs[i], colorsBlocks[i]);
+            blocs[i] = (Rectangle){(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + bolcksTrans, 250, blockWidth, 70};
+            // DrawRectangleRec(blocs[i], colorsBlocks[i]);
         }
 
         if (step == 3)
@@ -810,11 +813,11 @@ void search_visualisation(int blocNum, student std, bool active)
                 // }
                 if (distance / (arrowWidth + blockWidth) >= i)
                 {
-                    colorsBlocks[i] = (Color){255, 0, 0, 255};
+                    colorsBlocks[i] = (Color){162, 29, 29, 255};
                 }
                 else
                 {
-                    colorsBlocks[i] = (Color){50, 50, 50, 255};
+                    colorsBlocks[i] = (Color){119,119,119,255};
                 }
             }
             if ((int)distance % 200 == 0 && distance > 0)
@@ -862,16 +865,16 @@ void search_visualisation(int blocNum, student std, bool active)
             {
                 if (distance / (arrowWidth + blockWidth) == i)
                 {
-                    colorsBlocks[i] = (Color){255, 255, 0, 255};
+                    colorsBlocks[i] = (Color){255, 218, 93, 255};
                     continue;
                 }
                 else if (distance / (arrowWidth + blockWidth) > i)
                 {
-                    colorsBlocks[i] = (Color){255, 0, 0, 255};
+                    colorsBlocks[i] = (Color){162, 29, 29, 255};
                 }
                 else
                 {
-                    colorsBlocks[i] = (Color){50, 50, 50, 255};
+                    colorsBlocks[i] = (Color){119,119,119,255};
                 }
             }
 
@@ -923,21 +926,24 @@ void search_visualisation(int blocNum, student std, bool active)
                 if (distance / (arrowWidth + blockWidth) == i)
                 {
                                     // if (std.name != NULL)
-                    colorsBlocks[i] = (Color){0, 255, 0, 255};
+                    colorsBlocks[i] = (Color){80, 208, 80, 255};
                 }
                 else if (distance / (arrowWidth + blockWidth) > i)
                 {
-                    colorsBlocks[i] = (Color){255, 0, 0, 255};
+                    colorsBlocks[i] = (Color){162, 29, 29, 255};
                 }
                 else
                 {
-                    colorsBlocks[i] = (Color){50, 50, 50, 255};
+                    colorsBlocks[i] = (Color){119,119,119,255};
                 }
             }
             searchTimer += GetFrameTime();
 
             if (searchTimer > 3.0f)
             {
+                memset(id, '\0', 10);
+                memset(avrage, '\0', 10);
+                memset(name, '\0', 10);
                 searchTimer = 0.0f;
                 reset();
             }
@@ -948,33 +954,34 @@ void search_visualisation(int blocNum, student std, bool active)
                     {
                         sprintf(avrage, "%.2f", std.average);
                         sprintf(id, "%d", std.id);
-                       
-                        // name guiLable
-                        GuiLabel((Rectangle){screenWidth / 2 - MeasureText(std.name, 30) / 2, 300, MeasureText(std.name, 30), 30}, std.name);
-                        // average guiLable
-                        GuiLabel((Rectangle){screenWidth / 2 - MeasureText(avrage, 30) / 2, 320, MeasureText(avrage, 30), 30}, avrage);
-                        // id guiLable
-                        GuiLabel((Rectangle){screenWidth / 2 - MeasureText(id, 30) / 2, 340, MeasureText(id, 30), 30}, id);
+
+                        DrawTextEx(midCustomFont, std.name, (Vector2){(screenWidth  - MeasureText(std.name, 36)) / 1.8, 350}, 36, 0, (Color){80, 208, 80, 255});
+
+                        DrawTextEx(midCustomFont, "Avrage: ", (Vector2){screenWidth / 2  - (25 + MeasureText("Avrage: ",36)/2), 380}, 36, 0, (Color){80, 208, 80, 255});
+                        DrawTextEx(midCustomFont, avrage, (Vector2){screenWidth / 2 +25, 380}, 36, 0, (Color){80, 208, 80, 255});
+
 
             
                     }
                     else
                     {
-                        DrawText("Successful!", screenWidth / 2 - MeasureText("Successful!", 30) / 2, 350, 30, GREEN);
+                        DrawTextEx(titleCustomFont, "Successful!", (Vector2) {screenWidth / 2 - MeasureText("Successful!", 48) / 2.7, 360}, 48, 0, (Color){80, 208, 80, 255});
                     }
                 }
                 else
-                    DrawText("Not Found!", screenWidth / 2 - MeasureText("Not Founde!", 30) / 2, 350, 30, RED);
+                        DrawTextEx(titleCustomFont, "Not Found!", (Vector2) {screenWidth / 2 - MeasureText("Not Found!", 48) / 2.7, 360}, 48, 0, (Color) {162, 29, 29, 255});
             }
         }
 
         for (int i = 0; i < numOfBlocs; i++)
         {
 
-            DrawRectangleRec(blocs[i], colorsBlocks[i]);
+            // DrawRectangleRec(blocs[i], colorsBlocks[i]);
+            DrawRectangleRounded( blocs[i], 0.05, 10,colorsBlocks[i]);
+
         }
     }
 
-    DrawRectangleRec((Rectangle){0, 250, 25, 50}, (Color){244, 244, 244, 245});
-    DrawRectangleRec((Rectangle){775, 250, 25, 50}, (Color){244, 244, 244, 245});
+    DrawRectangleRec((Rectangle){0, 250, 25, 70}, (Color){244, 244, 244, 245});
+    DrawRectangleRec((Rectangle){775, 250, 25, 70}, (Color){244, 244, 244, 245});
 }
