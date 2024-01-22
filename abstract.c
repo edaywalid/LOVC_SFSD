@@ -15,7 +15,7 @@ header readHeader(File *file)
     fseek(file->file, 0, SEEK_SET);
     fread(&(file->Header), sizeof(header), 1, file->file);
 }
-void openFile(File *file, char mode)
+void openFile(File *file)
 {
     if (!fileExist(FILE_NAME))
     {
@@ -45,12 +45,6 @@ void closeFile(File *file)
     fseek(file->file, 0, SEEK_SET);
     fwrite(&file->Header, sizeof(header), 1, file->file);
     fclose(file->file);
-}
-
-header readHeader(File *file)
-{
-    fseek(file->file, 0, SEEK_SET);
-    fread(&(file->Header), sizeof(header), 1, file->file);
 }
 
 void readBloc(File *file, int position)

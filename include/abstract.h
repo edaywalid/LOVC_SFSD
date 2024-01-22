@@ -37,7 +37,7 @@ typedef struct File {
 
 // FILE RELATED METHODS
 void initFile(File *file);
-void openFile(File *file, char  mode);
+void openFile(File *file);
 void closeFile(File *file);
 void writeHeader(File *file);
 header readHeader(File *file);
