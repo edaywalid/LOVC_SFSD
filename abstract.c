@@ -48,7 +48,10 @@ void closeFile(File *file)
     fclose(file->file);
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9145bcf64c630fe8c034ba4f8d896eedc2653a02
 void readBloc(File *file, int position)
 {
 
