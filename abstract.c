@@ -15,12 +15,13 @@ header readHeader(File *file)
     fseek(file->file, 0, SEEK_SET);
     fread(&(file->Header), sizeof(header), 1, file->file);
 }
-void openFile(File *file, char mode)
+void openFile(File *file)
 {
     if (!fileExist(FILE_NAME))
     {
         file->file = fopen(FILE_NAME, "wb+");
-        if(file->file == NULL){
+        if (file->file == NULL)
+        {
             printf("Error while creating the file\n");
             exit(1);
         }
@@ -31,13 +32,13 @@ void openFile(File *file, char mode)
     else
     {
         file->file = fopen(FILE_NAME, "rb+");
-        if(file->file == NULL){
+        if (file->file == NULL)
+        {
             printf("Error while opening the file\n");
             exit(1);
         }
         readHeader(file);
     }
-
 }
 
 void closeFile(File *file)
@@ -47,11 +48,6 @@ void closeFile(File *file)
     fclose(file->file);
 }
 
-header readHeader(File *file)
-{
-    fseek(file->file, 0, SEEK_SET);
-    fread(&(file->Header), sizeof(header), 1, file->file);
-}
 
 void readBloc(File *file, int position)
 {
