@@ -22,6 +22,11 @@ char id[10];
 char name[50];
 char avrage[10];
 
+// View
+float scrollValue = 0.0f;
+float scrollSpeed = 5.0f;
+// scrollValue = Clamp(scrollValue, 0.0f, (file.Header.lastBloc) * 40.0f);
+
 // visualisation
 student searchStudent = {0};
 int blocPosition;
@@ -174,7 +179,7 @@ void insert_page()
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
     // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
-        if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
+    if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
 
     {
         currentPage = 0;
@@ -225,7 +230,7 @@ void delete_page()
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
     // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
-        if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
+    if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
 
     {
         currentPage = 0;
@@ -251,7 +256,7 @@ void search_page()
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
     // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
-        if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
+    if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
 
     {
         currentPage = 0;
@@ -275,7 +280,7 @@ void view_page()
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
     // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
-    if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
+    if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
     {
         currentPage = 0;
     }
@@ -519,6 +524,24 @@ void DrawStudentTable()
     int pos = 0, bloc = 0;
     int i = 0;
     int blocCount = 0;
+
+    // Scrollbar variables
+    Rectangle scrollbar = {screenWidth - 20, 0, 20, screenHeight};
+    // float scrollValue = 0.0f;
+    // float scrollSpeed = 5.0f;
+
+    if (IsKeyDown(KEY_DOWN))
+    {
+        scrollValue += scrollSpeed;
+    }
+    else if (IsKeyDown(KEY_UP))
+    {
+        scrollValue -= scrollSpeed;
+    }
+
+    // Clamp scrollValue to keep it within a valid range
+    // scrollValue = Clamp(scrollValue, 0.0f, (file.Header.lastBloc) * 40.0f);
+
     while (blocCount <= (&file)->Header.lastBloc)
     {
 
@@ -564,16 +587,24 @@ void DrawStudentTable()
         snprintf(id, 15, "%d", x.id);
         snprintf(avrage, 50, "%.2f", x.average);
 
-        GuiTextBox((Rectangle){100, 120 + (Place + 1) * 40, 200, 30}, id, 10, false);
+        GuiTextBox((Rectangle){100, 120 + (Place + 1) * 40 - (int)scrollValue, 200, 30}, id, 10, false);
         // Name
-        GuiTextBox((Rectangle){300, 120 + (1 + Place) * 40, 200, 30}, x.name, 64, false);
+        GuiTextBox((Rectangle){300, 120 + (1 + Place) * 40 - (int)scrollValue, 200, 30}, x.name, 64, false);
         // Average
-        GuiTextBox((Rectangle){500, 120 + (1 + Place++) * 40, 200, 30}, avrage, 5, false);
+        GuiTextBox((Rectangle){500, 120 + (1 + Place++) * 40 - (int)scrollValue, 200, 30}, avrage, 5, false);
 
         free(studentID);
         if (i == MAX_SIZE)
             i = 0;
     }
+
+    // Draw the scrollbar
+    DrawRectangleRec(scrollbar, LIGHTGRAY);
+    DrawRectangleLinesEx(scrollbar, 1, GRAY);
+
+    // Draw the scrollbar handle
+    Rectangle scrollbarHandle = {screenWidth - 20, scrollValue, 20, 40};
+    DrawRectangleRec(scrollbarHandle, GRAY);
 }
 
 void SaveFormData(student *formData)
@@ -590,7 +621,9 @@ void SaveFormData(student *formData)
 int main()
 {
 
-    openFile(&file, 'A');
+    initFile(&file);
+    // openFile(&file, 'A');
+
 
     InitWindow(screenWidth, screenHeight, "LOVC");
 
@@ -632,6 +665,7 @@ int main()
         EndDrawing();
     }
 
+    closeFile(&file);
     // De-Initialization
     CloseWindow();
 
@@ -649,12 +683,6 @@ void search_visualisation(int blocNum, student std, bool active)
     int arrowWidth = 50;
     int maxlength = std.name == NULL ? numOfBlocs * (blockWidth + arrowWidth) : (blocNum) * (blockWidth + arrowWidth);
 
-    // // Draw an arrow
-    // Vector2 point1 = {screenWidth / 2 + trainTrans, screenHeight / 2};
-    // Vector2 point2 = {screenWidth / 2 - 25 + trainTrans, screenHeight / 2 - 50};
-    // Vector2 point3 = {screenWidth / 2 + 25 + trainTrans, screenHeight / 2 - 50};
-    // DrawTriangle(point3, point2, point1, RED);
-
     if (step == 0)
     {
         reset();
@@ -665,41 +693,6 @@ void search_visualisation(int blocNum, student std, bool active)
         trainStop = false;
         step = 2;
     }
-
-    // if (step == 2)
-    // {
-    //     if (trainLeft)
-    //     {
-    //         if (point1.x == (screenWidth - blockWidth) / 2)
-    //         {
-    //             trainRight = true;
-    //             trainLeft = false;
-    //         }
-    //         trainTrans -= 1;
-    //     }
-    //     if (trainRight)
-    //     {
-    //         if (point1.x == (screenWidth + blockWidth) / 2)
-    //         {
-    //             trainCenter = true;
-    //             trainRight = false;
-    //         }
-    //         trainTrans += 1;
-    //     }
-    //     if (trainCenter)
-    //     {
-    //         if (point1.x == (screenWidth) / 2)
-    //         {
-    //             trainStop = true;
-    //             trainCenter = false;
-    //         }
-    //         trainTrans -= 1;
-    //     }
-    //     if (trainStop)
-    //     {
-    //         step = 3;
-    //     }
-    // }
 
     if (activeV)
     {
@@ -863,9 +856,6 @@ void search_visualisation(int blocNum, student std, bool active)
         }
     }
 
-    DrawRectangleRec((Rectangle){0, 250, 25, 50}, (Color) {244, 244, 244, 245});
-    DrawRectangleRec((Rectangle){775, 250, 25, 50}, (Color) {244, 244, 244, 245});
-    DrawTriangle((Vector2){ 0, 300 },    
-                 (Vector2){ 12.5, 400 },    
-                 (Vector2){ 25, 500}, RED);            
+    DrawRectangleRec((Rectangle){0, 250, 25, 50}, (Color){244, 244, 244, 245});
+    DrawRectangleRec((Rectangle){775, 250, 25, 50}, (Color){244, 244, 244, 245});
 }
