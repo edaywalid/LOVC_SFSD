@@ -298,13 +298,13 @@ void view_page()
 
     // GuiLabel((Rectangle){labelX, labelY, labelWidth, 50}, "View List");
 
-    const char *text = "View List";
-    Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
+    // const char *text = "View List";
+    // Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
 
-    int textX = (screenWidth - textSize.x) / 2;
-    int textY = 50;
-
-    DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color){119, 119, 119, 255});
+    // int textX = (screenWidth - textSize.x) / 2;
+    // int textY = 50;
+    
+    // DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color){119, 119, 119, 255});
 
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
@@ -566,11 +566,18 @@ void DrawStudentTable()
 
     GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
     GuiSetStyle(TEXTBOX, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
+     const char *text = "View List";
+    Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
+
+    int textX = (screenWidth - textSize.x) / 2;
+    int textY = 50 - (int)scrollValue;
+    
+    DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color){119, 119, 119, 255});
 
     // Table headers
-    GuiLabel((Rectangle){100, 120, 100, 30}, "ID");
-    GuiLabel((Rectangle){200, 120, 400, 30}, "Name");
-    GuiLabel((Rectangle){600, 120, 100, 30}, "Average");
+    GuiLabel((Rectangle){100, 120 - (int)scrollValue, 100, 30}, "ID");
+    GuiLabel((Rectangle){200, 120 - (int)scrollValue, 400, 30}, "Name");
+    GuiLabel((Rectangle){600, 120 - (int)scrollValue, 100, 30}, "Average");
 
     int Place = 0;
 
