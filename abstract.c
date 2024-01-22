@@ -49,9 +49,12 @@ void closeFile(File *file)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 9145bcf64c630fe8c034ba4f8d896eedc2653a02
+=======
+>>>>>>> 461b5e7e2c865fe194b6890990eb23e680006c35
 void readBloc(File *file, int position)
 {
 
@@ -152,13 +155,13 @@ int delete(int key, File *file)
     }
 }
 
-void insert(student s, File *file)
+int  insert(student s, File *file)
 {
     int bloc, charPos;
     if (strcmp(getStudentFromLinkedList(s.id, &bloc, &charPos, file), "NOT FOUND") != 0)
     {
         printf("This student already exists\n");
-        return;
+        return 0;
     }
     char *studentChar = studentToChar(s);
 
@@ -228,6 +231,7 @@ void insert(student s, File *file)
     writeBloc(file, bloc);
     file->Header.FistFreePosition = charPos;
     free(tmpChar);
+    return 1; 
 }
 
 student charToStudent(char *s)
