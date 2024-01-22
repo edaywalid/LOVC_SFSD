@@ -20,6 +20,10 @@ void openFile(File *file, char mode)
     if (!fileExist(FILE_NAME))
     {
         file->file = fopen(FILE_NAME, "wb+");
+        if(file->file == NULL){
+            printf("Error while creating the file\n");
+            exit(1);
+        }
         file->Header.firstBloc = 0;
         file->Header.lastBloc = 0;
         file->Header.FistFreePosition = 0;
@@ -27,6 +31,10 @@ void openFile(File *file, char mode)
     else
     {
         file->file = fopen(FILE_NAME, "rb+");
+        if(file->file == NULL){
+            printf("Error while opening the file\n");
+            exit(1);
+        }
         readHeader(file);
     }
 
@@ -326,8 +334,6 @@ char *getStudentFromLinkedList(int key, int *blocPosition, int *charPosition, Fi
         return "NOT FOUND";
     }
 search:
-    int c = 0;
-    int p = 1;
     while (buffer.charArray[i] != '|')
     {
 
