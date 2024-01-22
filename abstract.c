@@ -5,28 +5,31 @@
 
 Buffer buffer;
 
-void initFile(File *file)
+int fileExist(char *fname)
 {
-    File newFile;
-    openFile(&newFile, APPEND);
-    openFile(&newFile, 'A');
-    newFile.Header.firstBloc = 0;
-    newFile.Header.lastBloc = 0;
-    newFile.Header.FistFreePosition = 0;
-    *file = newFile;
+    return fopen(fname, "r") != NULL;
 }
 
+header readHeader(File *file)
+{
+    fseek(file->file, 0, SEEK_SET);
+    fread(&(file->Header), sizeof(header), 1, file->file);
+}
 void openFile(File *file, char mode)
 {
-    if (mode == APPEND || mode == READ)
+    if (!fileExist(FILE_NAME))
     {
-        file->file = fopen(FILE_NAME, (mode == APPEND) ? "wb+" : "rb+");
-        if (file->file == NULL)
-        {
-            printf("Error opening file!\n");
-            exit(1);
-        }
+        file->file = fopen(FILE_NAME, "wb+");
+        file->Header.firstBloc = 0;
+        file->Header.lastBloc = 0;
+        file->Header.FistFreePosition = 0;
     }
+    else
+    {
+        file->file = fopen(FILE_NAME, "rb+");
+        readHeader(file);
+    }
+
 }
 
 void closeFile(File *file)
