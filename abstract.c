@@ -48,7 +48,6 @@ void closeFile(File *file)
     fclose(file->file);
 }
 
-
 void readBloc(File *file, int position)
 {
 
