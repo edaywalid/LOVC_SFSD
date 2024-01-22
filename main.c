@@ -265,11 +265,16 @@ void view_page()
     // Draw content for Page 1
     GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
     GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
+    
     int labelWidth = MeasureText("View List", 48);
     int labelX = (screenWidth - labelWidth) / 2;
     int labelY = 50;
 
     GuiLabel((Rectangle){labelX, labelY, labelWidth, 50}, "View List");
+
+    // Set up scroll panel
+    Rectangle scrollPanel = { 100, 120, 600, 300 }; // Adjust the dimensions as needed
+    BeginScissorMode(scrollPanel.x, scrollPanel.y, scrollPanel.width, scrollPanel.height);
 
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
@@ -283,7 +288,11 @@ void view_page()
     }
 
     DrawStudentTable();
+
+    // End scroll panel
+    EndScissorMode();
 }
+
 
 // Function to check if the mouse is inside a text box
 bool IsMouseInsideTextBox(Rectangle textBox)
@@ -612,7 +621,27 @@ void DrawStudentTable()
 int main()
 {
 
-    openFile(&file);
+    openFile(&file, 'A');
+    student s1 = {"John", 1, 15.5, 0};
+    student s2 = {"Mary", 2, 16.5, 0};
+    student s3 = {"Peter", 3, 17.5, 0};
+    student s4 = {"Paul", 4, 18.5, 0};
+    student s5 = {"George", 5, 19.5, 0};
+    student s9 = {"George", 11, 19.5, 0};
+    student s6 = {"George", 90, 19.5, 0};
+    student s7 = {"George", 22, 19.5, 0};
+    student s8 = {"George", 13, 19.5, 0};
+
+
+    insert(s3, &file);
+    insert(s2, &file);
+    insert(s5, &file);
+    insert(s1, &file);
+    insert(s4, &file);
+    insert(s9, &file);
+    insert(s6, &file);
+    insert(s7, &file);
+    insert(s8, &file);
 
     InitWindow(screenWidth, screenHeight, "LOVC");
 
@@ -660,6 +689,7 @@ int main()
     closeFile(&file);
     // De-Initialization
     CloseWindow();
+    closeFile(&file);
 
     return 0;
 }
