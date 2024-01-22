@@ -44,6 +44,7 @@ int distance = 0;
 
 float searchTimer = 0.0f;
 
+
 void reset()
 {
     step = 0;
@@ -92,8 +93,9 @@ student stdTest = {"Abderrahmane", 0, 12, 0};
 
 // Pages
 //  Function to draw content for Page 0
+
 void home_page()
-{
+{    
     // Draw content for Page 0
     GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
     GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
@@ -109,28 +111,35 @@ void home_page()
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
 
     // Insert
+   
+   Sound clickSound = LoadSound("Sound/clickv2.wav");
     if (GuiButton((Rectangle){buttonX, 150, buttonWidth + 15, 25}, "Insert"))
-    {
+    {   
+        PlaySound(clickSound);    
         currentPage = 1;
     }
 
     // Search
     if (GuiButton((Rectangle){buttonX, 190, buttonWidth + 15, 25}, "Search"))
-    {
+    {   
+        PlaySound(clickSound);
         currentPage = 2;
     }
 
     // Delete
     if (GuiButton((Rectangle){buttonX, 230, buttonWidth + 15, 25}, "Delete"))
-    {
+    {   
+        PlaySound(clickSound); 
         currentPage = 3;
     }
 
     // View List
     if (GuiButton((Rectangle){buttonX, 270, buttonWidth + 15, 25}, "View List"))
-    {
+    {   
+        PlaySound(clickSound);
         currentPage = 4;
     }
+    
 }
 
 int insertionStatus = 0;     // 0: No action, 1: Successful, 2: Student doesn't exist
@@ -141,10 +150,12 @@ const float insertionDuration = 5.0f;
 void insert_message()
 {
     if (insertionStatus == 1)
+    {
         DrawText("Successful!", screenWidth / 2 - MeasureText("Successful!", 30) / 2, screenHeight / 2 + 50, 30, GREEN);
-    else if (insertionStatus == 2)
+    }else if (insertionStatus == 2)
+    {
         DrawText("Invalid!", screenWidth / 2 - MeasureText("Invalid!", 30) / 2, screenHeight / 2 + 50, 30, RED);
-
+    }
     // Update timer
     if (insertionStatus > 0)
     {
@@ -176,7 +187,9 @@ void insert_page()
     // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
         if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
 
-    {
+    {   
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound); 
         currentPage = 0;
     }
     student std;
@@ -191,11 +204,10 @@ const float deleteDuration = 5.0f;
 
 void delete_message()
 {
-    if (deleteStatus == 1)
+    if (deleteStatus == 1)  
         DrawText("Successful!", screenWidth / 2 - MeasureText("Successful!", 30) / 2, screenHeight / 2 + 50, 30, GREEN);
-    else if (deleteStatus == 2)
+       else if (deleteStatus == 2)
         DrawText("Student Doesn't Exist!", screenWidth / 2 - MeasureText("Student Doesn't Exist!", 30) / 2, screenHeight / 2 + 50, 30, RED);
-
     // Update timer
     if (deleteStatus > 0)
     {
@@ -227,7 +239,9 @@ void delete_page()
     // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
         if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
 
-    {
+    {   
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound); 
         currentPage = 0;
     }
 
@@ -254,6 +268,8 @@ void search_page()
         if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
 
     {
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound); 
         currentPage = 0;
     }
 
@@ -277,6 +293,8 @@ void view_page()
     // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
     if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE,"")))
     {
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound); 
         currentPage = 0;
     }
 
@@ -368,7 +386,8 @@ void insert_form()
 
     // Save button
     if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_FILE_SAVE_CLASSIC, "Save")) || IsKeyPressed(KEY_ENTER))
-    {
+    {   Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound); 
         std.name = name;
         std.id = atoi(id);
         std.average = atof(avrage);
@@ -427,7 +446,8 @@ void search_form()
 
     // Save button
     if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_LENS, "")) || IsKeyPressed(KEY_ENTER))
-    {
+    {   Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound); 
         int ID = atoi(id);
         int charPosition;
         if (ID)
@@ -486,19 +506,24 @@ void delete_form()
     int timer;
     // Save button
     if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_CROSS, "")))
-    {
+    {   Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound); 
         int DeleteId = atoi(id);
         if (DeleteId)
         {
             int check = delete (DeleteId, &file);
 
             if (check)
-            {
+            {   
+                Sound clickSound = LoadSound("Sound/REALSUCCES.wav");
+                PlaySound(clickSound);
                 deleteStatus = 1;   // Set status to successful
                 deleteTimer = 0.0f; // Reset the timer
             }
             else
-            {
+            {   
+                Sound clickSound = LoadSound("Sound/wrong.wav");
+                PlaySound(clickSound);
                 deleteStatus = 2;   // Set status to student doesn't exist
                 deleteTimer = 0.0f; // Reset the timer
             }
@@ -596,6 +621,8 @@ int main()
 
     SetTargetFPS(60);
 
+    InitAudioDevice();
+
     while (!WindowShouldClose())
     {
 
@@ -605,6 +632,7 @@ int main()
         // Update
 
         // Draw
+        
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
