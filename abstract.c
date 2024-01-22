@@ -1,32 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "abstract.h"
+#include "include/abstract.h"
 
 Buffer buffer;
 
-void initFile(File *file)
+int fileExist(char *fname)
 {
-    File newFile;
-    openFile(&newFile, APPEND);
-    openFile(&newFile, 'A');
-    newFile.Header.firstBloc = 0;
-    newFile.Header.lastBloc = 0;
-    newFile.Header.FistFreePosition = 0;
-    *file = newFile;
+    return fopen(fname, "r") != NULL;
 }
 
+header readHeader(File *file)
+{
+    fseek(file->file, 0, SEEK_SET);
+    fread(&(file->Header), sizeof(header), 1, file->file);
+}
 void openFile(File *file, char mode)
 {
-    if (mode == APPEND || mode == READ)
+    if (!fileExist(FILE_NAME))
     {
-        file->file = fopen(FILE_NAME, (mode == APPEND) ? "wb+" : "rb+");
-        if (file->file == NULL)
-        {
-            printf("Error opening file!\n");
+        file->file = fopen(FILE_NAME, "wb+");
+        if(file->file == NULL){
+            printf("Error while creating the file\n");
             exit(1);
         }
+        file->Header.firstBloc = 0;
+        file->Header.lastBloc = 0;
+        file->Header.FistFreePosition = 0;
     }
+    else
+    {
+        file->file = fopen(FILE_NAME, "rb+");
+        if(file->file == NULL){
+            printf("Error while opening the file\n");
+            exit(1);
+        }
+        readHeader(file);
+    }
+
 }
 
 void closeFile(File *file)
@@ -63,9 +74,11 @@ void writeBloc(File *file, int position)
     fwrite(&buffer, sizeof(Buffer), 1, file->file);
 }
 
-int countDigits(int num) {
+int countDigits(int num)
+{
     int count = 0;
-    while (num != 0) {
+    while (num != 0)
+    {
         num /= 10;
         ++count;
     }
@@ -92,25 +105,20 @@ char *studentToChar(student s)
     return result;
 }
 
-
-
 int delete(int key, File *file)
 {
 
-   
     int blocPosition, charPosition;
     char *str = getStudentFromLinkedList(key, &blocPosition, &charPosition, file);
     if (strcmp(str, "NOT FOUND") != 0)
     {
 
-       
         readBloc(file, blocPosition);
         int k = charPosition;
 
         while (buffer.charArray[k] != '|')
         {
 
-        
             k++;
             if (k == MAX_SIZE)
             {
@@ -135,10 +143,9 @@ int delete(int key, File *file)
 
     else
     {
-       return 0;
+        return 0;
     }
 }
-
 
 void insert(student s, File *file)
 {
@@ -175,15 +182,14 @@ void insert(student s, File *file)
         {
             if (file->Header.lastBloc == bloc)
             {
-               
+
                 writeBloc(file, file->Header.lastBloc++);
                 allocateBloc(file);
                 bloc = file->Header.lastBloc;
-                
             }
             else
             {
-               
+
                 writeBloc(file, bloc);
                 readBloc(file, ++bloc);
             }
@@ -191,13 +197,12 @@ void insert(student s, File *file)
         }
         buffer.charArray[charPos++] = studentChar[j++];
     }
-    
+
     k = 0;
-    
 
     while (tmpChar[k] != '\0')
     {
-        
+
         if (charPos == MAX_SIZE)
         {
             if (file->Header.lastBloc == bloc)
@@ -215,13 +220,10 @@ void insert(student s, File *file)
         }
         buffer.charArray[charPos++] = tmpChar[k++];
     }
-    writeBloc(file, bloc );
+    writeBloc(file, bloc);
     file->Header.FistFreePosition = charPos;
     free(tmpChar);
 }
-
-
-
 
 student charToStudent(char *s)
 {
@@ -332,7 +334,6 @@ char *getStudentFromLinkedList(int key, int *blocPosition, int *charPosition, Fi
         return "NOT FOUND";
     }
 search:
-
     while (buffer.charArray[i] != '|')
     {
 
@@ -348,7 +349,13 @@ search:
         {
 
             readBloc(file, ++blocCount);
+
             i = 0;
+        }
+        else if (blocCount == file->Header.lastBloc && i == file->Header.FistFreePosition)
+        {
+            *blocPosition = blocCount;
+            return "NOT FOUND";
         }
     }
 
@@ -393,24 +400,23 @@ search:
         studentData[k] = '\0';
         return studentData;
     }
-     else if (atoi(studentData) > key)
-         {
-             // here the insertion will be done before this student
-             // the charPosition is already set to the beginning of the student
-             // the blocPosition is already set to the bloc of the student
-             return "NOT FOUND";
-         }
+    else if (atoi(studentData) > key)
+    {
+        // here the insertion will be done before this student
+        // the charPosition is already set to the beginning of the student
+        // the blocPosition is already set to the bloc of the student
+        return "NOT FOUND";
+    }
 
-         if (blocCount <= file->Header.lastBloc)
-         {
+    if (blocCount <= file->Header.lastBloc)
+    {
 
-             goto search;
-         }
-         else
-         {
-             *blocPosition = file->Header.lastBloc ;
-            //  *blocPosition = -1;
-             *charPosition = file->Header.FistFreePosition; // indicate that the student should be inserted at the end of the file
-             return "NOT FOUND";
-         }
+        goto search;
+    }
+    else
+    {
+        *blocPosition = file->Header.lastBloc;
+        *charPosition = file->Header.FistFreePosition; // indicate that the student should be inserted at the end of the file
+        return "NOT FOUND";
+    }
 }
