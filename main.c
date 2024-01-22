@@ -22,12 +22,7 @@ char id[10];
 char name[50];
 char avrage[10];
 
-// View
-float scrollValue = 0.0f;
-float scrollSpeed = 5.0f;
-// scrollValue = Clamp(scrollValue, 0.0f, (file.Header.lastBloc) * 40.0f);
-
-//Font
+// Font
 Font customFont;
 Font titleCustomFont;
 Font midCustomFont;
@@ -41,7 +36,6 @@ bool trainLeft = false;
 bool trainRight = false;
 bool trainCenter = false;
 bool trainStop = true;
-
 
 int speed = 5;
 int trainTrans = 0;
@@ -77,24 +71,16 @@ student stdTest = {"Abderrahmane", 0, 12, 0};
 
 // Pages
 //  Function to draw content for Page 0
+
 void home_page()
 {
-    // Draw content for Page 0
-    // GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
-    // GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-    // int labelWidth = MeasureText("STUDENT MANAGING SYSTEM", 48);
-    // int labelX = (screenWidth - labelWidth) / 2;
-    // int labelY = 50;
-
-    // GuiLabel((Rectangle){labelX, labelY, labelWidth, 50}, "STUDENT MANAGING SYSTEM");
-
     const char *text = "STUDENT MANAGING SYSTEM";
-        Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
+    Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
 
-        int textX = (screenWidth - textSize.x) / 2;
-        int textY = 50;
+    int textX = (screenWidth - textSize.x) / 2;
+    int textY = 50;
 
-        DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color) {119,119,119,255});
+    DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color){119, 119, 119, 255});
 
     // Button Style
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
@@ -102,26 +88,38 @@ void home_page()
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
 
     // Insert
+
     if (GuiButton((Rectangle){buttonX, 150, buttonWidth + 15, 25}, "Insert"))
     {
+    Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound);
         currentPage = 1;
     }
 
     // Search
     if (GuiButton((Rectangle){buttonX, 190, buttonWidth + 15, 25}, "Search"))
     {
+            Sound clickSound = LoadSound("Sound/clickv2.wav");
+
+        PlaySound(clickSound);
         currentPage = 2;
     }
 
     // Delete
     if (GuiButton((Rectangle){buttonX, 230, buttonWidth + 15, 25}, "Delete"))
     {
+            Sound clickSound = LoadSound("Sound/clickv2.wav");
+
+        PlaySound(clickSound);
         currentPage = 3;
     }
 
     // View List
     if (GuiButton((Rectangle){buttonX, 270, buttonWidth + 15, 25}, "View List"))
     {
+            Sound clickSound = LoadSound("Sound/clickv2.wav");
+
+        PlaySound(clickSound);
         currentPage = 4;
     }
 }
@@ -134,10 +132,13 @@ const float insertionDuration = 5.0f;
 void insert_message()
 {
     if (insertionStatus == 1)
+    {
         DrawText("Successful!", screenWidth / 2 - MeasureText("Successful!", 30) / 2, screenHeight / 2 + 50, 30, GREEN);
+    }
     else if (insertionStatus == 2)
+    {
         DrawText("Invalid!", screenWidth / 2 - MeasureText("Invalid!", 30) / 2, screenHeight / 2 + 50, 30, RED);
-
+    }
     // Update timer
     if (insertionStatus > 0)
     {
@@ -154,35 +155,28 @@ void insert_message()
 // Function to draw content for Insert
 void insert_page()
 {
-    // Draw content for Page 1
-    // GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
-    // GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-    // int labelWidth = MeasureText("Insert", 48);
-    // int labelX = (screenWidth - labelWidth) / 2;
-    // int labelY = 50;
-
-    // GuiLabel((Rectangle){labelX, labelY, labelWidth, 50}, "Insert");
 
     const char *text = "Insert";
-        Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
+    Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
 
-        int textX = (screenWidth - textSize.x) / 2;
-        int textY = 50;
+    int textX = (screenWidth - textSize.x) / 2;
+    int textY = 50;
 
-        DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color) {119,119,119,255});
+    DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color){119, 119, 119, 255});
 
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
-    // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
     if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
 
     {
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound);
         currentPage = 0;
     }
     student std;
     insert_form();
-    // insert_message();
+    insert_message();
 }
 
 int deleteStatus = 0;     // 0: No action, 1: Successful, 2: Student doesn't exist
@@ -196,7 +190,6 @@ void delete_message()
         DrawText("Successful!", screenWidth / 2 - MeasureText("Successful!", 30) / 2, screenHeight / 2 + 50, 30, GREEN);
     else if (deleteStatus == 2)
         DrawText("Student Doesn't Exist!", screenWidth / 2 - MeasureText("Student Doesn't Exist!", 30) / 2, screenHeight / 2 + 50, 30, RED);
-
     // Update timer
     if (deleteStatus > 0)
     {
@@ -213,30 +206,22 @@ void delete_message()
 
 void delete_page()
 {
-    // // Draw content for Page 1
-    // GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
-    // GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-    // int labelWidth = MeasureText("Delete", 48);
-    // int labelX = (screenWidth - labelWidth) / 2;
-    // int labelY = 50;
-
-    // GuiLabel((Rectangle){labelX, labelY, labelWidth, 50}, "Delete");
-
     const char *text = "Delete";
-        Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
+    Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
 
-        int textX = (screenWidth - textSize.x) / 2;
-        int textY = 50;
+    int textX = (screenWidth - textSize.x) / 2;
+    int textY = 50;
 
-        DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color) {119,119,119,255});
+    DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color){119, 119, 119, 255});
 
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
-    // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
     if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
 
     {
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound);
         currentPage = 0;
     }
 
@@ -247,22 +232,13 @@ void delete_page()
 // Function to draw content for Search
 void search_page()
 {
-    // // Draw content for Page 1
-    // GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
-    // GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-    // int labelWidth = MeasureText("Search", 48);
-    // int labelX = (screenWidth - labelWidth) / 2;
-    // int labelY = 50;
-
-    // GuiLabel((Rectangle){labelX, labelY, labelWidth, 50}, "Search");
-
     const char *text = "Search";
-        Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
+    Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
 
-        int textX = (screenWidth - textSize.x) / 2;
-        int textY = 50;
+    int textX = (screenWidth - textSize.x) / 2;
+    int textY = 50;
 
-        DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color) {119,119,119,255});
+    DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color){119, 119, 119, 255});
 
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
@@ -271,37 +247,23 @@ void search_page()
     if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
 
     {
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound);
         currentPage = 0;
     }
 
     search_form();
 }
-// Function to draw content for View
 void view_page()
 {
-    // // Draw content for Page 1
-    // GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
-    // GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-    // int labelWidth = MeasureText("View List", 48);
-    // int labelX = (screenWidth - labelWidth) / 2;
-    // int labelY = 50;
-
-    // GuiLabel((Rectangle){labelX, labelY, labelWidth, 50}, "View List");
-
-    const char *text = "View List";
-        Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
-
-        int textX = (screenWidth - textSize.x) / 2;
-        int textY = 50;
-
-        DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color) {119,119,119,255});
 
     GuiSetStyle(DEFAULT, TEXT_SIZE, 18);
     int buttonWidth = MeasureText("Back", 18);
     int buttonX = (screenWidth - buttonWidth) / 2 - 15;
-    // if (GuiButton((Rectangle){700, 400, buttonWidth + 15, 25}, "Back"))
     if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
     {
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound);
         currentPage = 0;
     }
 
@@ -394,21 +356,31 @@ void insert_form()
     // Save button
     if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_FILE_SAVE_CLASSIC, "Save")) || IsKeyPressed(KEY_ENTER))
     {
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound);
         std.name = name;
         std.id = atoi(id);
         std.average = atof(avrage);
         std.LogicallyDeleted = 0;
         if (std.id && std.average)
         {
-            // insert(std, &file);
-            insert(std, &file);
-            insertionStatus = 1;   // Set status to successful
-            insertionTimer = 0.0f; // Reset the timer
-        }
-        else
-        {
-            insertionStatus = 2;   // Set status to student doesn't exist
-            insertionTimer = 0.0f; // Reset the timer
+
+            int check = insert(std, &file);
+            if (check)
+            {
+                Sound clickSound = LoadSound("Sound/REALSUCCES.wav");
+                PlaySound(clickSound);
+                insertionStatus = 1; // Set status to successful
+                insertionTimer = 0.0f;
+            }
+            // Reset the timere
+            else
+            {
+                Sound clickSound = LoadSound("Sound/wrong.wav");
+                PlaySound(clickSound);
+                insertionStatus = 2; // Set status to student doesn't exist
+                insertionTimer = 0.0f;
+            }
         }
 
         memset(id, '\0', 10);
@@ -453,13 +425,13 @@ void search_form()
     // Save button
     if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_LENS, "")) || IsKeyPressed(KEY_ENTER))
     {
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound);
         int ID = atoi(id);
         int charPosition;
         if (ID)
         {
-            printf("ok\n");
             searchStudent = getStudentFromLinkedList(ID, &blocPosition, &charPosition, &file) == "NOT FOUND" ? (student){0} : charToStudent(getStudentFromLinkedList(ID, &blocPosition, &charPosition, &file));
-            printf("ok\n");
             if (!activeV)
             {
                 activeV = true;
@@ -506,8 +478,10 @@ void delete_form()
 
     int timer;
     // Save button
-    if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_CROSS, ""))  || IsKeyPressed(KEY_ENTER))
+    if (GuiButton((Rectangle){710, 120, buttonWidth, 20}, GuiIconText(ICON_CROSS, "")))
     {
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
+        PlaySound(clickSound);
         int DeleteId = atoi(id);
         if (DeleteId)
         {
@@ -515,28 +489,46 @@ void delete_form()
 
             if (check)
             {
+                Sound clickSound = LoadSound("Sound/REALSUCCES.wav");
+                PlaySound(clickSound);
                 deleteStatus = 1;   // Set status to successful
                 deleteTimer = 0.0f; // Reset the timer
             }
             else
             {
+                Sound clickSound = LoadSound("Sound/wrong.wav");
+                PlaySound(clickSound);
                 deleteStatus = 2;   // Set status to student doesn't exist
                 deleteTimer = 0.0f; // Reset the timer
             }
         }
     }
 }
+// View
+float scrollValue = 0.0f;
+float scrollSpeed;
+float scrollhandelTrans = 0.0f;
+
 
 void DrawStudentTable()
 {
 
-        GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-        GuiSetStyle(TEXTBOX, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
+    int numOfRows = 0;
+
+    GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
+    GuiSetStyle(TEXTBOX, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
+    const char *text = "View List";
+    Vector2 textSize = MeasureTextEx(titleCustomFont, text, 48, 0);
+
+    int textX = (screenWidth - textSize.x) / 2;
+    int textY = 50 - (int)scrollValue;
+
+    DrawTextEx(titleCustomFont, text, (Vector2){textX, textY}, 48, 0, (Color){119, 119, 119, 255});
 
     // Table headers
-    GuiLabel((Rectangle){100, 120, 100, 30}, "ID");
-    GuiLabel((Rectangle){200, 120, 400, 30}, "Name");
-    GuiLabel((Rectangle){600, 120, 100, 30}, "Average");
+    GuiLabel((Rectangle){100, 120 - (int)scrollValue, 100, 30}, "ID");
+    GuiLabel((Rectangle){200, 120 - (int)scrollValue, 400, 30}, "Name");
+    GuiLabel((Rectangle){600, 120 - (int)scrollValue, 100, 30}, "Average");
 
     int Place = 0;
 
@@ -545,42 +537,51 @@ void DrawStudentTable()
     int i = 0;
     int blocCount = 0;
 
-    // Scrollbar variables
-    Rectangle scrollbar = {screenWidth - 10, 0, 10, screenHeight};
-    // float scrollValue = 0.0f;
-    // float scrollSpeed = 5.0f;
 
-    if (IsKeyDown(KEY_DOWN))
+    if (IsKeyDown(KEY_DOWN) && scrollhandelTrans <= screenHeight -50)
     {
-        scrollValue += scrollSpeed;
+        scrollhandelTrans += scrollSpeed;
     }
-    else if (IsKeyDown(KEY_UP))
+    else if (IsKeyDown(KEY_UP)&& scrollhandelTrans >= 0)
     {
-        scrollValue -= scrollSpeed;
+        scrollhandelTrans -= scrollSpeed;
     }
 
-    // Clamp scrollValue to keep it within a valid range
-    // scrollValue = Clamp(scrollValue, 0.0f, (file.Header.lastBloc) * 40.0f);
+    if (GetMouseWheelMove() < 0 && scrollhandelTrans <= screenHeight -50)
+    {
+        scrollhandelTrans += scrollSpeed;
+    }
+    else if (GetMouseWheelMove() > 0 && scrollhandelTrans >= 0)
+    {
+        scrollhandelTrans -= scrollSpeed;
+    }
+
 
     while (blocCount <= (&file)->Header.lastBloc)
     {
+        
 
         while (blocCount <= (&file)->Header.lastBloc && i < MAX_SIZE && buffer.charArray[i] != '|')
         {
+            
 
             i++;
             if (i == MAX_SIZE)
             {
+                
                 readBloc((&file), ++blocCount);
                 i = 0;
             }
         }
-        if (blocCount > (&file)->Header.lastBloc)
+        if (blocCount > (&file)->Header.lastBloc) {
+        
             break;
+        }
         int k = 0;
         i++;
         if (i == MAX_SIZE)
         {
+            
             readBloc((&file), ++blocCount);
             i = 0;
         }
@@ -588,9 +589,11 @@ void DrawStudentTable()
         char *studentID = malloc(100);
         while (i < MAX_SIZE && buffer.charArray[i] != '$')
         {
+            
             studentID[k++] = buffer.charArray[i++];
             if (i == MAX_SIZE)
             {
+                
                 readBloc((&file), ++blocCount);
                 i = 0;
             }
@@ -599,6 +602,7 @@ void DrawStudentTable()
 
         if (i < MAX_SIZE - 1 && buffer.charArray[i + 1] == '1' || i == MAX_SIZE - 1 && buffer.charArray[0] == '1')
         {
+            
             free(studentID);
             continue;
         }
@@ -607,44 +611,65 @@ void DrawStudentTable()
         snprintf(id, 15, "%d", x.id);
         snprintf(avrage, 50, "%.2f", x.average);
 
-        GuiTextBox((Rectangle){100, 120 + (Place + 1) * 40 - (int)scrollValue, 100, 30}, id, 10, false);
-        // Name
-        GuiTextBox((Rectangle){200, 120 + (1 + Place) * 40 - (int)scrollValue,400 , 30}, x.name, 64, false);
-        // Average
-        GuiTextBox((Rectangle){600, 120 + (1 + Place++) * 40 - (int)scrollValue, 100, 30}, avrage, 5, false);
+        GuiTextBox((Rectangle){100, 120 + (Place + 1) * 40 - scrollValue, 100, 30}, id, 10, false);
+        GuiTextBox((Rectangle){200, 120 + (1 + Place) * 40 - scrollValue, 400, 30}, x.name, 64, false);
+        GuiTextBox((Rectangle){600, 120 + (1 + Place++) * 40 - scrollValue, 100, 30}, avrage, 5, false);
 
+        numOfRows++;
         free(studentID);
-        if (i == MAX_SIZE)
+        if (i == MAX_SIZE) {
+            
             i = 0;
+        }
     }
+ scrollSpeed = 5.0f;
+    Rectangle scrollbar = {screenWidth - 10, 0, 10, screenHeight};
 
     // Draw the scrollbar
     DrawRectangleRec(scrollbar, LIGHTGRAY);
     DrawRectangleLinesEx(scrollbar, 1, GRAY);
 
+    
     // Draw the scrollbar handle
-    Rectangle scrollbarHandle = {screenWidth - 10, scrollValue, 10, 40};
+    Rectangle scrollbarHandle = {screenWidth - 10, scrollhandelTrans, 10, 50};
     DrawRectangleRec(scrollbarHandle, GRAY);
+
+
+scrollValue = (40*((numOfRows + 3) ) / (screenHeight - 50))  * scrollhandelTrans;
+if(scrollValue  <0) {
+    scrollValue = 0;
+}
+
 
     memset(id, '\0', 10);
     memset(avrage, '\0', 10);
-GuiSetStyle(TEXTBOX, TEXT_ALIGNMENT, TEXT_ALIGN_LEFT);
+    GuiSetStyle(TEXTBOX, TEXT_ALIGNMENT, TEXT_ALIGN_LEFT);
+
 }
 
 int main()
 {
 
     openFile(&file);
+    for(int i = 1; i <= 100; i++) {
+        sprintf(name, "JH%d", i);
+        // student s1 = {name, i, 15.5, 0};
+        student s1 = {"Jhon", i,15.5,0};
+        insert(s1, &file);
+    }
+
+    memset(name, '\0', 50);
 
     InitWindow(screenWidth, screenHeight, "LOVC");
 
     SetTargetFPS(60);
 
-            // Load a custom font (you can replace this with your font file)
+    InitAudioDevice();
+
+    // Load a custom font (you can replace this with your font file)
     customFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 18, 0, 250);
     titleCustomFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 48, 0, 250);
-    midCustomFont = LoadFontEx("fonts/poppins/Poppins-Regular.ttf", 36, 0, 250);
-    // Font customFontTilte = LoadFontEx("fonts/poppins/Poppins-Regular.ttf", 48, 0, 250);
+    midCustomFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 36, 0, 250);
 
     // Set the custom font
     GuiSetFont(customFont);
@@ -656,9 +681,9 @@ int main()
 
         // Main game loop
         // Update
-
-
+        
         // Draw
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -686,8 +711,8 @@ int main()
         EndDrawing();
     }
 
-    closeFile(&file);
     // De-Initialization
+    closeFile(&file);
     CloseWindow();
 
     return 0;
@@ -710,7 +735,7 @@ void search_visualisation(int blocNum, student std, bool active)
         for (int i = 0; i < numOfBlocs; i++)
         {
 
-            colorsBlocks[i] = (Color){119,119,119,255};
+            colorsBlocks[i] = (Color){119, 119, 119, 255};
         }
     }
     if (step == 1)
@@ -721,18 +746,16 @@ void search_visualisation(int blocNum, student std, bool active)
         for (int i = 0; i < numOfBlocs; i++)
         {
 
-            colorsBlocks[i] = (Color){119,119,119,255};
+            colorsBlocks[i] = (Color){119, 119, 119, 255};
         }
     }
 
     if (activeV)
     {
-        // Draw an arrow
         Vector2 point1 = {screenWidth / 2 + trainTrans, screenHeight / 2};
         Vector2 point2 = {screenWidth / 2 - 25 + trainTrans, screenHeight / 2 - 50};
         Vector2 point3 = {screenWidth / 2 + 25 + trainTrans, screenHeight / 2 - 50};
-        DrawTriangle(point3, point2, point1, (Color) {162, 29, 29, 255});
-
+        DrawTriangle(point3, point2, point1, (Color){162, 29, 29, 255});
 
         if (step == 2)
         {
@@ -781,7 +804,7 @@ void search_visualisation(int blocNum, student std, bool active)
                 }
                 else
                 {
-                    colorsBlocks[i] = (Color){119,119,119,255};
+                    colorsBlocks[i] = (Color){119, 119, 119, 255};
                 }
             }
         }
@@ -791,33 +814,27 @@ void search_visualisation(int blocNum, student std, bool active)
             if (i != numOfBlocs - 1)
             {
                 Rectangle bodyRect = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + bolcksTrans, 283, 40, 4};
-                DrawRectangleRec(bodyRect, (Color) {119,119,119,255});
+                DrawRectangleRec(bodyRect, (Color){119, 119, 119, 255});
                 Vector2 point1 = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + 40 + bolcksTrans, 280};
                 Vector2 point2 = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + 40 + bolcksTrans, 290};
                 Vector2 point3 = {(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + blockWidth + 50 + bolcksTrans, 285};
-                DrawTriangle(point1, point2, point3, (Color) {119,119,119,255});
+                DrawTriangle(point1, point2, point3, (Color){119, 119, 119, 255});
             }
 
             blocs[i] = (Rectangle){(screenWidth - blockWidth) / 2 + i * (blockWidth + arrowWidth) + bolcksTrans, 250, blockWidth, 70};
-            // DrawRectangleRec(blocs[i], colorsBlocks[i]);
         }
 
         if (step == 3)
         {
             for (int i = 0; i < numOfBlocs; i++)
             {
-                // if (distance / (arrowWidth + blockWidth) == i)
-                // {
-                //     colorsBlocks[i] = (Color){0, 0, 255, 255};
-                //     continue;
-                // }
                 if (distance / (arrowWidth + blockWidth) >= i)
                 {
                     colorsBlocks[i] = (Color){162, 29, 29, 255};
                 }
                 else
                 {
-                    colorsBlocks[i] = (Color){119,119,119,255};
+                    colorsBlocks[i] = (Color){119, 119, 119, 255};
                 }
             }
             if ((int)distance % 200 == 0 && distance > 0)
@@ -874,7 +891,7 @@ void search_visualisation(int blocNum, student std, bool active)
                 }
                 else
                 {
-                    colorsBlocks[i] = (Color){119,119,119,255};
+                    colorsBlocks[i] = (Color){119, 119, 119, 255};
                 }
             }
 
@@ -925,7 +942,6 @@ void search_visualisation(int blocNum, student std, bool active)
             {
                 if (distance / (arrowWidth + blockWidth) == i)
                 {
-                                    // if (std.name != NULL)
                     colorsBlocks[i] = (Color){80, 208, 80, 255};
                 }
                 else if (distance / (arrowWidth + blockWidth) > i)
@@ -934,7 +950,7 @@ void search_visualisation(int blocNum, student std, bool active)
                 }
                 else
                 {
-                    colorsBlocks[i] = (Color){119,119,119,255};
+                    colorsBlocks[i] = (Color){119, 119, 119, 255};
                 }
             }
             searchTimer += GetFrameTime();
@@ -949,36 +965,32 @@ void search_visualisation(int blocNum, student std, bool active)
             }
             else
             {
-                if (std.name != NULL) {
-                     if (searchTimer > 1.0f)
+                if (std.name != NULL)
+                {
+
+                    if (searchTimer > 1.0f)
                     {
                         sprintf(avrage, "%.2f", std.average);
                         sprintf(id, "%d", std.id);
 
-                        DrawTextEx(midCustomFont, std.name, (Vector2){(screenWidth  - MeasureText(std.name, 36)) / 1.8, 350}, 36, 0, (Color){80, 208, 80, 255});
-
-                        DrawTextEx(midCustomFont, "Avrage: ", (Vector2){screenWidth / 2  - (25 + MeasureText("Avrage: ",36)/2), 380}, 36, 0, (Color){80, 208, 80, 255});
-                        DrawTextEx(midCustomFont, avrage, (Vector2){screenWidth / 2 +25, 380}, 36, 0, (Color){80, 208, 80, 255});
-
-
-            
+                        DrawTextEx(midCustomFont, std.name, (Vector2){(screenWidth - MeasureText(std.name, 36)) / 2, 350}, 36, 0, (Color){80, 208, 80, 255});
+                        DrawTextEx(midCustomFont, "Avrage: ", (Vector2){screenWidth / 2 - (25 + MeasureText("Avrage: ", 36) / 2), 380}, 36, 0, (Color){80, 208, 80, 255});
+                        DrawTextEx(midCustomFont, avrage, (Vector2){screenWidth / 2 + 25, 380}, 36, 0, (Color){80, 208, 80, 255});
                     }
                     else
                     {
-                        DrawTextEx(titleCustomFont, "Successful!", (Vector2) {screenWidth / 2 - MeasureText("Successful!", 48) / 2.7, 360}, 48, 0, (Color){80, 208, 80, 255});
+                        DrawTextEx(titleCustomFont, "Successful!", (Vector2){screenWidth / 2 - MeasureText("Successful!", 48) / 2.7, 360}, 48, 0, (Color){80, 208, 80, 255});
                     }
                 }
                 else
-                        DrawTextEx(titleCustomFont, "Not Found!", (Vector2) {screenWidth / 2 - MeasureText("Not Found!", 48) / 2.7, 360}, 48, 0, (Color) {162, 29, 29, 255});
+                    DrawTextEx(titleCustomFont, "Not Found!", (Vector2){screenWidth / 2 - MeasureText("Not Found!", 48) / 2.7, 360}, 48, 0, (Color){162, 29, 29, 255});
             }
         }
 
         for (int i = 0; i < numOfBlocs; i++)
         {
 
-            // DrawRectangleRec(blocs[i], colorsBlocks[i]);
-            DrawRectangleRounded( blocs[i], 0.05, 10,colorsBlocks[i]);
-
+            DrawRectangleRounded(blocs[i], 0.05, 10, colorsBlocks[i]);
         }
     }
 

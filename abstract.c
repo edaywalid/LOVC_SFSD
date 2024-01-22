@@ -20,8 +20,9 @@ void openFile(File *file)
     if (!fileExist(FILE_NAME))
     {
         file->file = fopen(FILE_NAME, "wb+");
-        if(file->file == NULL){
-            printf("Error while creating the file\n");
+        if (file->file == NULL)
+        {
+            
             exit(1);
         }
         file->Header.firstBloc = 0;
@@ -31,13 +32,13 @@ void openFile(File *file)
     else
     {
         file->file = fopen(FILE_NAME, "rb+");
-        if(file->file == NULL){
-            printf("Error while opening the file\n");
+        if (file->file == NULL)
+        {
+            
             exit(1);
         }
         readHeader(file);
     }
-
 }
 
 void closeFile(File *file)
@@ -88,7 +89,7 @@ int countDigits(int num)
 char *studentToChar(student s)
 {
     // Calculate the size needed for the string, including space for the null terminator
-    size_t size = snprintf(NULL, 0, "%d$%s$%f$%d#", s.id, s.name, s.average, s.LogicallyDeleted) + 1;
+    size_t size = snprintf(NULL, 0, "%d$%s$%.2f$%d#", s.id, s.name, s.average, s.LogicallyDeleted) + 1;
 
     // // Allocate memory for the string
     size = size + countDigits(size) + 1;
@@ -100,7 +101,7 @@ char *studentToChar(student s)
         exit(EXIT_FAILURE);
     }
     // Format the string
-    snprintf(result, size, "%ld|%d$%d$%s$%f#", size, s.id, s.LogicallyDeleted, s.name, s.average);
+    snprintf(result, size, "%ld|%d$%d$%s$%.2f#", size, s.id, s.LogicallyDeleted, s.name, s.average);
 
     return result;
 }
@@ -147,16 +148,17 @@ int delete(int key, File *file)
     }
 }
 
-void insert(student s, File *file)
+int insert(student s, File *file)
 {
     int bloc, charPos;
     if (strcmp(getStudentFromLinkedList(s.id, &bloc, &charPos, file), "NOT FOUND") != 0)
     {
-        printf("This student already exists\n");
-        return;
+        
+        printf("%d-This student already exists\n", s.id);
+        return 0;
     }
     char *studentChar = studentToChar(s);
-
+    //printf\("error(.+?)"\);
     int currentBloc = bloc;
     char *tmpChar = malloc(MAX_SIZE * (file->Header.lastBloc + 1));
 
@@ -164,9 +166,11 @@ void insert(student s, File *file)
     int k = charPos;
     while (currentBloc <= file->Header.lastBloc)
     {
+        
         readBloc(file, currentBloc);
         for (int l = k; l < MAX_SIZE; l++)
         {
+            
             tmpChar[j++] = buffer.charArray[l];
         }
         currentBloc++;
@@ -178,18 +182,20 @@ void insert(student s, File *file)
     j = 0;
     while (studentChar[j] != '\0')
     {
+        
         if (charPos == MAX_SIZE)
         {
+            
             if (file->Header.lastBloc == bloc)
             {
-
+                
                 writeBloc(file, file->Header.lastBloc++);
                 allocateBloc(file);
                 bloc = file->Header.lastBloc;
             }
             else
             {
-
+                
                 writeBloc(file, bloc);
                 readBloc(file, ++bloc);
             }
@@ -202,17 +208,19 @@ void insert(student s, File *file)
 
     while (tmpChar[k] != '\0')
     {
-
+        
         if (charPos == MAX_SIZE)
         {
             if (file->Header.lastBloc == bloc)
             {
+                
                 writeBloc(file, file->Header.lastBloc++);
                 allocateBloc(file);
                 bloc = file->Header.lastBloc;
             }
             else
             {
+                
                 writeBloc(file, bloc);
                 readBloc(file, ++bloc);
             }
@@ -223,6 +231,7 @@ void insert(student s, File *file)
     writeBloc(file, bloc);
     file->Header.FistFreePosition = charPos;
     free(tmpChar);
+    return 1;
 }
 
 student charToStudent(char *s)
@@ -336,10 +345,10 @@ char *getStudentFromLinkedList(int key, int *blocPosition, int *charPosition, Fi
 search:
     while (buffer.charArray[i] != '|')
     {
-
+// //printf\("error(.+?)"\);
         if (buffer.charArray[i] == '#')
         {
-
+//printf\("error(.+?)"\);
             *charPosition = i == MAX_SIZE - 1 ? 0 : i + 1; // always set the charPosition the beginning of any inserted student
         }
 
@@ -347,6 +356,7 @@ search:
 
         if (i == MAX_SIZE)
         {
+            //printf\("error(.+?)"\);
 
             readBloc(file, ++blocCount);
 
@@ -364,16 +374,18 @@ search:
 
     if (i == MAX_SIZE)
     {
+        //printf\("error(.+?)"\);
         readBloc(file, ++blocCount);
         i = 0;
     }
 
     while (buffer.charArray[i] != '$')
     {
-
+// //printf\("error(.+?)"\);
         studentData[k++] = buffer.charArray[i++];
         if (i == MAX_SIZE)
         {
+            //printf\("error(.+?)"\);
             readBloc(file, ++blocCount);
             i = 0;
         }
@@ -383,6 +395,7 @@ search:
     *blocPosition = blocCount; // indicate that this is the bloc to insert ;
     if (atoi(studentData) == key)
     {
+        //printf\("error(.+?)"\);
         if (i < MAX_SIZE - 1 && buffer.charArray[i + 1] == '1' || i == MAX_SIZE - 1 && buffer.charArray[0] == '1')
         {
             return "NOT FOUND";
@@ -390,8 +403,10 @@ search:
         int tmp = blocCount;
         while (buffer.charArray[i] != '#')
         {
+            // //printf\("error(.+?)"\);
             if (i == MAX_SIZE)
             {
+                //printf\("error(.+?)"\);
                 readBloc(file, ++tmp);
                 i = 0;
             }
@@ -410,7 +425,7 @@ search:
 
     if (blocCount <= file->Header.lastBloc)
     {
-
+//printf\("error(.+?)"\);
         goto search;
     }
     else
