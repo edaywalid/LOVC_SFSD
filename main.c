@@ -44,6 +44,8 @@ int distance = 0;
 
 float searchTimer = 0.0f;
 
+Texture2D resizedBackGround ;
+
 void reset()
 {
     step = 0;
@@ -673,6 +675,21 @@ int main()
 
     // Set the custom font
     GuiSetFont(customFont);
+    Image icon = LoadImage("backGround/icon3.png");
+    
+    ImageResize(&icon,50,50);
+    
+    SetWindowIcon(icon);
+    
+    Image backGround = LoadImage("BackGround/images.png");
+
+    ImageResize(&backGround,800,450);
+
+    resizedBackGround = LoadTextureFromImage(backGround) ;
+
+    UnloadImage(backGround);
+    
+    
 
     while (!WindowShouldClose())
     {
@@ -685,7 +702,7 @@ int main()
         // Draw
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        DrawTexture(resizedBackGround, 0, 0, WHITE);
 
         // Draw content based on the current page
         switch (currentPage)
@@ -989,11 +1006,15 @@ void search_visualisation(int blocNum, student std, bool active)
 
         for (int i = 0; i < numOfBlocs; i++)
         {
-
             DrawRectangleRounded(blocs[i], 0.05, 10, colorsBlocks[i]);
         }
     }
+    
+    Rectangle rect1 = {0, 250, 25, 70};
+    Rectangle srcRec1 = {rect1.x, rect1.y, rect1.width, rect1.height};
+    Rectangle rect2 = {775, 250, 25, 70};
+    Rectangle srcRec2 = {rect2.x, rect2.y, rect2.width, rect2.height};
 
-    DrawRectangleRec((Rectangle){0, 250, 25, 70}, (Color){244, 244, 244, 245});
-    DrawRectangleRec((Rectangle){775, 250, 25, 70}, (Color){244, 244, 244, 245});
+    DrawTextureRec(resizedBackGround, srcRec1, (Vector2){rect1.x, rect1.y}, WHITE);  
+    DrawTextureRec(resizedBackGround, srcRec2, (Vector2){rect2.x, rect2.y}, WHITE);  
 }
