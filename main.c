@@ -352,7 +352,7 @@ void insert_form()
     rec_label = (Rectangle){start, 120, labelWidth, 20};
     rec_input = (Rectangle){start + labelWidth, 120, inputWidth, 20};
 
-    GuiLabel(rec_label, "Avrage:");
+    GuiLabel(rec_label, "Average:");
     GuiTextBox(rec_input, avrage, 10, editMode3);
 
     // Save button
@@ -649,91 +649,6 @@ if(scrollValue  <0) {
 
 }
 
-int main()
-{
-
-    openFile(&file);
-    for(int i = 1; i <= 100; i++) {
-        sprintf(name, "JH%d", i);
-        // student s1 = {name, i, 15.5, 0};
-        student s1 = {"Jhon", i,15.5,0};
-        insert(s1, &file);
-    }
-
-    memset(name, '\0', 50);
-
-    InitWindow(screenWidth, screenHeight, "LOVC");
-
-    SetTargetFPS(60);
-
-    InitAudioDevice();
-
-    // Load a custom font (you can replace this with your font file)
-    customFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 18, 0, 250);
-    titleCustomFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 48, 0, 250);
-    midCustomFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 36, 0, 250);
-
-    // Set the custom font
-    GuiSetFont(customFont);
-    Image icon = LoadImage("backGround/icon3.png");
-    
-    ImageResize(&icon,50,50);
-    
-    SetWindowIcon(icon);
-    
-    Image backGround = LoadImage("BackGround/images.png");
-
-    ImageResize(&backGround,800,450);
-
-    resizedBackGround = LoadTextureFromImage(backGround) ;
-
-    UnloadImage(backGround);
-    
-    
-
-    while (!WindowShouldClose())
-    {
-
-        // Initialization
-
-        // Main game loop
-        // Update
-        
-        // Draw
-
-        BeginDrawing();
-        DrawTexture(resizedBackGround, 0, 0, WHITE);
-
-        // Draw content based on the current page
-        switch (currentPage)
-        {
-        case 1:
-            insert_page();
-            break;
-        case 2:
-            search_page();
-            break;
-        case 3:
-            delete_page();
-            break;
-        case 4:
-            view_page();
-            break;
-
-        default:
-            home_page();
-            break;
-        }
-
-        EndDrawing();
-    }
-
-    // De-Initialization
-    closeFile(&file);
-    CloseWindow();
-
-    return 0;
-}
 
 void search_visualisation(int blocNum, student std, bool active)
 {
@@ -1017,4 +932,109 @@ void search_visualisation(int blocNum, student std, bool active)
 
     DrawTextureRec(resizedBackGround, srcRec1, (Vector2){rect1.x, rect1.y}, WHITE);  
     DrawTextureRec(resizedBackGround, srcRec2, (Vector2){rect2.x, rect2.y}, WHITE);  
+}
+
+int main()
+{
+
+    openFile(&file);
+    
+    student s1 = {"Walid", 1,17.5,0};
+    insert(s1, &file);
+      s1 = (student){"Moh", 33,15,0};
+    insert(s1, &file);
+      s1 = (student){"Abderraouf", 44,17,0};
+    insert(s1, &file);
+      s1 = (student){"Abderrahmane", 4,12,0};
+    insert(s1, &file);
+      s1 = (student){"Tarek", 43,13,0};
+    insert(s1, &file);
+      s1 = (student){"Hocine", 22,9,0};
+    insert(s1, &file);
+      s1 = (student){"Adel", 23,2,0};
+    insert(s1, &file);
+      s1 = (student){"Rayan", 66,13,0};
+    insert(s1, &file);
+      s1 = (student){"Wail", 12,20,0};
+    insert(s1, &file);
+      s1 = (student){"Aymen", 99,19,0};
+    insert(s1, &file);
+      s1 = (student){"Imad", 234,1,0};
+    insert(s1, &file);
+      s1 = (student){"Youcef", 989,0,0};
+    insert(s1, &file);
+
+    memset(name, '\0', 50);
+
+    InitWindow(screenWidth, screenHeight, "LOVC");
+
+    SetTargetFPS(60);
+
+    InitAudioDevice();
+
+    // Load a custom font (you can replace this with your font file)
+    customFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 18, 0, 250);
+    titleCustomFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 48, 0, 250);
+    midCustomFont = LoadFontEx("fonts/poppins/Poppins-Bold.ttf", 36, 0, 250);
+
+    // Set the custom font
+    GuiSetFont(customFont);
+    Image icon = LoadImage("backGround/icon3.png");
+    
+    ImageResize(&icon,50,50);
+    
+    SetWindowIcon(icon);
+    
+    Image backGround = LoadImage("BackGround/images.png");
+
+    ImageResize(&backGround,800,450);
+
+    resizedBackGround = LoadTextureFromImage(backGround) ;
+
+    UnloadImage(backGround);
+    
+    
+
+    while (!WindowShouldClose())
+    {
+
+        // Initialization
+
+        // Main game loop
+        // Update
+        
+        // Draw
+
+        BeginDrawing();
+        DrawTexture(resizedBackGround, 0, 0, WHITE);
+
+        // Draw content based on the current page
+        switch (currentPage)
+        {
+        case 1:
+            insert_page();
+            break;
+        case 2:
+            search_page();
+            break;
+        case 3:
+            delete_page();
+            break;
+        case 4:
+            view_page();
+            break;
+
+        default:
+            home_page();
+            break;
+        }
+
+        EndDrawing();
+    }
+
+    // De-Initialization
+    closeFile(&file);
+    CloseWindow();
+
+    return 0;
 }
