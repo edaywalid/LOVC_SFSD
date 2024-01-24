@@ -3,6 +3,7 @@
 #include "include/raylib.h"
 #include "include/raygui.h"
 #include "include/abstract.h"
+#include "include/index.h"
 #include <stdbool.h>
 #include <time.h>
 
@@ -44,7 +45,7 @@ int distance = 0;
 
 float searchTimer = 0.0f;
 
-Texture2D resizedBackGround ;
+Texture2D resizedBackGround;
 
 void reset()
 {
@@ -93,7 +94,7 @@ void home_page()
 
     if (GuiButton((Rectangle){buttonX, 150, buttonWidth + 15, 25}, "Insert"))
     {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
         PlaySound(clickSound);
         currentPage = 1;
     }
@@ -101,7 +102,7 @@ void home_page()
     // Search
     if (GuiButton((Rectangle){buttonX, 190, buttonWidth + 15, 25}, "Search"))
     {
-            Sound clickSound = LoadSound("Sound/clickv2.wav");
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
 
         PlaySound(clickSound);
         currentPage = 2;
@@ -110,7 +111,7 @@ void home_page()
     // Delete
     if (GuiButton((Rectangle){buttonX, 230, buttonWidth + 15, 25}, "Delete"))
     {
-            Sound clickSound = LoadSound("Sound/clickv2.wav");
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
 
         PlaySound(clickSound);
         currentPage = 3;
@@ -119,7 +120,7 @@ void home_page()
     // View List
     if (GuiButton((Rectangle){buttonX, 270, buttonWidth + 15, 25}, "View List"))
     {
-            Sound clickSound = LoadSound("Sound/clickv2.wav");
+        Sound clickSound = LoadSound("Sound/clickv2.wav");
 
         PlaySound(clickSound);
         currentPage = 4;
@@ -430,10 +431,12 @@ void search_form()
         Sound clickSound = LoadSound("Sound/clickv2.wav");
         PlaySound(clickSound);
         int ID = atoi(id);
-        int charPosition;
+
         if (ID)
         {
-            searchStudent = getStudentFromLinkedList(ID, &blocPosition, &charPosition, &file) == "NOT FOUND" ? (student){0} : charToStudent(getStudentFromLinkedList(ID, &blocPosition, &charPosition, &file));
+            Index index = search(ID, file);
+            searchStudent = index.bloc == -1 ? (student){0} : getStudentFromBloc(index.bloc, index.position, index.id, file);
+            blocPosition = index.bloc;
             if (!activeV)
             {
                 activeV = true;
@@ -510,8 +513,7 @@ void delete_form()
 float scrollValue = 0.0f;
 float scrollSpeed;
 float scrollhandelTrans = 0.0f;
-
-
+int stopUpdating = 0;
 void DrawStudentTable()
 {
 
@@ -534,121 +536,70 @@ void DrawStudentTable()
 
     int Place = 0;
 
-    readBloc(&file, 0);
-    int pos = 0, bloc = 0;
-    int i = 0;
-    int blocCount = 0;
-
-
-    if (IsKeyDown(KEY_DOWN) && scrollhandelTrans <= screenHeight -50)
+    if (IsKeyDown(KEY_DOWN) && scrollhandelTrans <= screenHeight - 50)
     {
         scrollhandelTrans += scrollSpeed;
     }
-    else if (IsKeyDown(KEY_UP)&& scrollhandelTrans >= 0)
+    else if (IsKeyDown(KEY_UP) && scrollhandelTrans >= 0)
     {
         scrollhandelTrans -= scrollSpeed;
     }
 
-    if (GetMouseWheelMove() < 0 && scrollhandelTrans <= screenHeight -50)
+    if (GetMouseWheelMove() < 0 && scrollhandelTrans <= screenHeight - 50)
     {
-        scrollhandelTrans += scrollSpeed;
+        scrollhandelTrans += scrollSpeed*3;
     }
     else if (GetMouseWheelMove() > 0 && scrollhandelTrans >= 0)
     {
-        scrollhandelTrans -= scrollSpeed;
+        scrollhandelTrans -= scrollSpeed*3;
     }
 
+    indexNode *head = loadIndexToRam(file);
+    indexNode *current = head;
 
-    while (blocCount <= (&file)->Header.lastBloc)
+    while (current != NULL)
     {
-        
-
-        while (blocCount <= (&file)->Header.lastBloc && i < MAX_SIZE && buffer.charArray[i] != '|')
+        int i = 0;
+        while (i < current->nb)
         {
-            
-
+            sprintf(id, "%d", current->indexes[i].id);
+            int bloc = current->indexes[i].bloc;
+            int pos = current->indexes[i].position;
+            student x = getStudentFromBloc(bloc, pos, current->indexes[i].id, file);
+            sprintf(avrage, "%.2f", x.average);
+            GuiTextBox((Rectangle){100, 120 + (Place + 1) * 40 - (int)scrollValue, 100, 30}, id, 10, false);
+            // Name
+            GuiTextBox((Rectangle){200, 120 + (1 + Place) * 40 - (int)scrollValue, 400, 30}, x.name, 64, false);
+            // Average
+            GuiTextBox((Rectangle){600, 120 + (1 + Place++) * 40 - (int)scrollValue, 100, 30}, avrage, 5, false);
             i++;
-            if (i == MAX_SIZE)
-            {
-                
-                readBloc((&file), ++blocCount);
-                i = 0;
-            }
+            numOfRows++;
         }
-        if (blocCount > (&file)->Header.lastBloc) {
-        
-            break;
-        }
-        int k = 0;
-        i++;
-        if (i == MAX_SIZE)
-        {
-            
-            readBloc((&file), ++blocCount);
-            i = 0;
-        }
-
-        char *studentID = malloc(100);
-        while (i < MAX_SIZE && buffer.charArray[i] != '$')
-        {
-            
-            studentID[k++] = buffer.charArray[i++];
-            if (i == MAX_SIZE)
-            {
-                
-                readBloc((&file), ++blocCount);
-                i = 0;
-            }
-        }
-        studentID[k] = '\0';
-
-        if (i < MAX_SIZE - 1 && buffer.charArray[i + 1] == '1' || i == MAX_SIZE - 1 && buffer.charArray[0] == '1')
-        {
-            
-            free(studentID);
-            continue;
-        }
-
-        student x = charToStudent(getStudentFromLinkedList(atoi(studentID), &bloc, &pos, &file));
-        snprintf(id, 15, "%d", x.id);
-        snprintf(avrage, 50, "%.2f", x.average);
-
-        GuiTextBox((Rectangle){100, 120 + (Place + 1) * 40 - scrollValue, 100, 30}, id, 10, false);
-        GuiTextBox((Rectangle){200, 120 + (1 + Place) * 40 - scrollValue, 400, 30}, x.name, 64, false);
-        GuiTextBox((Rectangle){600, 120 + (1 + Place++) * 40 - scrollValue, 100, 30}, avrage, 5, false);
-
-        numOfRows++;
-        free(studentID);
-        if (i == MAX_SIZE) {
-            
-            i = 0;
-        }
+        current = current->next;
     }
- scrollSpeed = 5.0f;
+
+    // Draw the scrollbar
+    scrollSpeed = 5.0f;
     Rectangle scrollbar = {screenWidth - 10, 0, 10, screenHeight};
 
     // Draw the scrollbar
     DrawRectangleRec(scrollbar, LIGHTGRAY);
     DrawRectangleLinesEx(scrollbar, 1, GRAY);
 
-    
     // Draw the scrollbar handle
     Rectangle scrollbarHandle = {screenWidth - 10, scrollhandelTrans, 10, 50};
     DrawRectangleRec(scrollbarHandle, GRAY);
 
-
-scrollValue = (40*((numOfRows + 3) ) / (screenHeight - 50))  * scrollhandelTrans;
-if(scrollValue  <0) {
-    scrollValue = 0;
-}
-
+    scrollValue = (40 * ((numOfRows + 3)) / (screenHeight - 50)) * scrollhandelTrans;
+    if (scrollValue < 0)
+    {
+        scrollValue = 0;
+    }
 
     memset(id, '\0', 10);
     memset(avrage, '\0', 10);
     GuiSetStyle(TEXTBOX, TEXT_ALIGNMENT, TEXT_ALIGN_LEFT);
-
 }
-
 
 void search_visualisation(int blocNum, student std, bool active)
 {
@@ -924,44 +875,44 @@ void search_visualisation(int blocNum, student std, bool active)
             DrawRectangleRounded(blocs[i], 0.05, 10, colorsBlocks[i]);
         }
     }
-    
+
     Rectangle rect1 = {0, 250, 25, 70};
     Rectangle srcRec1 = {rect1.x, rect1.y, rect1.width, rect1.height};
     Rectangle rect2 = {775, 250, 25, 70};
     Rectangle srcRec2 = {rect2.x, rect2.y, rect2.width, rect2.height};
 
-    DrawTextureRec(resizedBackGround, srcRec1, (Vector2){rect1.x, rect1.y}, WHITE);  
-    DrawTextureRec(resizedBackGround, srcRec2, (Vector2){rect2.x, rect2.y}, WHITE);  
+    DrawTextureRec(resizedBackGround, srcRec1, (Vector2){rect1.x, rect1.y}, WHITE);
+    DrawTextureRec(resizedBackGround, srcRec2, (Vector2){rect2.x, rect2.y}, WHITE);
 }
 
 int main()
 {
 
     openFile(&file);
-    
-    student s1 = {"Walid", 1,17.5,0};
+
+    student s1 = {"Walid", 1, 17.5, 0};
     insert(s1, &file);
-      s1 = (student){"Moh", 33,15,0};
+    s1 = (student){"Moh", 33, 15, 0};
     insert(s1, &file);
-      s1 = (student){"Abderraouf", 44,17,0};
+    s1 = (student){"Abderraouf", 44, 17, 0};
     insert(s1, &file);
-      s1 = (student){"Abderrahmane", 4,12,0};
+    s1 = (student){"Abderrahmane", 4, 12, 0};
     insert(s1, &file);
-      s1 = (student){"Tarek", 43,13,0};
+    s1 = (student){"Tarek", 43, 13, 0};
     insert(s1, &file);
-      s1 = (student){"Hocine", 22,9,0};
+    s1 = (student){"Hocine", 22, 9, 0};
     insert(s1, &file);
-      s1 = (student){"Adel", 23,2,0};
+    s1 = (student){"Adel", 23, 2, 0};
     insert(s1, &file);
-      s1 = (student){"Rayan", 66,13,0};
+    s1 = (student){"Rayan", 66, 13, 0};
     insert(s1, &file);
-      s1 = (student){"Wail", 12,20,0};
+    s1 = (student){"Wail", 12, 20, 0};
     insert(s1, &file);
-      s1 = (student){"Aymen", 99,19,0};
+    s1 = (student){"Aymen", 99, 19, 0};
     insert(s1, &file);
-      s1 = (student){"Imad", 234,1,0};
+    s1 = (student){"Imad", 234, 1, 0};
     insert(s1, &file);
-      s1 = (student){"Youcef", 989,0,0};
+    s1 = (student){"Youcef", 989, 0, 0};
     insert(s1, &file);
 
     memset(name, '\0', 50);
@@ -980,20 +931,18 @@ int main()
     // Set the custom font
     GuiSetFont(customFont);
     Image icon = LoadImage("backGround/icon3.png");
-    
-    ImageResize(&icon,50,50);
-    
+
+    ImageResize(&icon, 50, 50);
+
     SetWindowIcon(icon);
-    
+
     Image backGround = LoadImage("BackGround/images.png");
 
-    ImageResize(&backGround,800,450);
+    ImageResize(&backGround, 800, 450);
 
-    resizedBackGround = LoadTextureFromImage(backGround) ;
+    resizedBackGround = LoadTextureFromImage(backGround);
 
     UnloadImage(backGround);
-    
-    
 
     while (!WindowShouldClose())
     {
@@ -1002,7 +951,7 @@ int main()
 
         // Main game loop
         // Update
-        
+
         // Draw
 
         BeginDrawing();
