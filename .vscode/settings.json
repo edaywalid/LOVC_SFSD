@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "*.php": "php",
-        "abstract.h": "c",
-        "stdbool.h": "c",
-        "raygui.h": "c",
-        "raylib.h": "c"
-    }
-}
