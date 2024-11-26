@@ -1,7 +1,7 @@
 
 # Ordered List with Variable Size and Overlap
 
-![Raylib Logo](https://www.raylib.com/logo/raylib_256x256.png)
+![Raylib Logo](https://upload.wikimedia.org/wikipedia/commons/f/f4/Raylib_logo.png)
 
 ## Overview
 
