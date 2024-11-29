@@ -15,7 +15,7 @@ This project was developed during our second year in the **File Structure and Da
 
 ## Screenshots
 
-![Fetch](./video.gif)
+![Video](./video.gif)
 
 ## Table of Contents
 
@@ -35,9 +35,10 @@ This project was developed during our second year in the **File Structure and Da
 
 1.  Clone the repository :
 
+    ```bash
         git clone https://github.com/edaywalid/LOVC_SFSD
-
         cd LOVC_SFSD
+    ```
 
 2.  Build and Run the project :
 
@@ -46,9 +47,11 @@ This project was developed during our second year in the **File Structure and Da
 ### Windows
 
 1.  Clone the repository :
-    git clone https://github.com/edaywalid/LOVC_SFSD
 
+    ```bash
+        git clone https://github.com/edaywalid/LOVC_SFSD
         cd LOVC_SFSD
+    ```
 
 2.  Build and Run the project :
 
@@ -60,7 +63,7 @@ After building the project, you can run the executable to start the application.
 
 ## Project Structure
 
-    ├── backGround
+    ├── background
     │   ├── ...
     ├── build
     │   ├── build.bat
