@@ -12,6 +12,12 @@ This project was developed during our second year in the **File Structure and Da
 - **Variable Size Records**: Each record in the list can have a variable size.
 - **Overlap Handling**: Efficient management and handling of overlapping records.
 - **Cross-Platform Build**: Supports building on both Linux and Windows.
+- **Visualisation**: Provides a visual interface to interact with the list.
+- **Sound Effects**: Includes sound effects for user interactions.
+- **Custom Fonts**: Utilises custom fonts for the application interface.
+- **User-Friendly Interface**: Provides a user-friendly interface for managing records.
+- **Record Management**: Supports adding, removing, and managing records within the list.
+- **Data Persistence**: Persists the list data to a binary file for future use.
 
 ## Screenshots
 
