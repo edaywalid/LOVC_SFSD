@@ -45,7 +45,7 @@ int distance = 0;
 
 float searchTimer = 0.0f;
 
-Texture2D resizedBackGround;
+Texture2D resizedbackground;
 
 void reset() {
   step = 0;
@@ -92,14 +92,14 @@ void home_page() {
   // Insert
 
   if (GuiButton((Rectangle){buttonX, 150, buttonWidth + 15, 25}, "Insert")) {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
     PlaySound(clickSound);
     currentPage = 1;
   }
 
   // Search
   if (GuiButton((Rectangle){buttonX, 190, buttonWidth + 15, 25}, "Search")) {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
 
     PlaySound(clickSound);
     currentPage = 2;
@@ -107,7 +107,7 @@ void home_page() {
 
   // Delete
   if (GuiButton((Rectangle){buttonX, 230, buttonWidth + 15, 25}, "Delete")) {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
 
     PlaySound(clickSound);
     currentPage = 3;
@@ -115,7 +115,7 @@ void home_page() {
 
   // View List
   if (GuiButton((Rectangle){buttonX, 270, buttonWidth + 15, 25}, "View List")) {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
 
     PlaySound(clickSound);
     currentPage = 4;
@@ -166,7 +166,7 @@ void insert_page() {
   if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
 
   {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
     PlaySound(clickSound);
     currentPage = 0;
   }
@@ -217,7 +217,7 @@ void delete_page() {
   if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
 
   {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
     PlaySound(clickSound);
     currentPage = 0;
   }
@@ -244,7 +244,7 @@ void search_page() {
   if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, "")))
 
   {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
     PlaySound(clickSound);
     currentPage = 0;
   }
@@ -257,7 +257,7 @@ void view_page() {
   int buttonWidth = MeasureText("Back", 18);
   int buttonX = (screenWidth - buttonWidth) / 2 - 15;
   if (GuiButton((Rectangle){750, 400, 30, 30}, GuiIconText(ICON_HOUSE, ""))) {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
     PlaySound(clickSound);
     currentPage = 0;
   }
@@ -345,7 +345,7 @@ void insert_form() {
   if (GuiButton((Rectangle){710, 120, buttonWidth, 20},
                 GuiIconText(ICON_FILE_SAVE_CLASSIC, "Save")) ||
       IsKeyPressed(KEY_ENTER)) {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
     PlaySound(clickSound);
     std.name = name;
     std.id = atoi(id);
@@ -355,14 +355,14 @@ void insert_form() {
 
       int check = insert(std, &file);
       if (check) {
-        Sound clickSound = LoadSound("Sound/REALSUCCES.wav");
+        Sound clickSound = LoadSound("sound/REALSUCCES.wav");
         PlaySound(clickSound);
         insertionStatus = 1; // Set status to successful
         insertionTimer = 0.0f;
       }
       // Reset the timere
       else {
-        Sound clickSound = LoadSound("Sound/wrong.wav");
+        Sound clickSound = LoadSound("sound/wrong.wav");
         PlaySound(clickSound);
         insertionStatus = 2; // Set status to student doesn't exist
         insertionTimer = 0.0f;
@@ -406,7 +406,7 @@ void search_form() {
   if (GuiButton((Rectangle){710, 120, buttonWidth, 20},
                 GuiIconText(ICON_LENS, "")) ||
       IsKeyPressed(KEY_ENTER)) {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
     PlaySound(clickSound);
     int ID = atoi(id);
 
@@ -459,19 +459,19 @@ void delete_form() {
   // Save button
   if (GuiButton((Rectangle){710, 120, buttonWidth, 20},
                 GuiIconText(ICON_CROSS, ""))) {
-    Sound clickSound = LoadSound("Sound/clickv2.wav");
+    Sound clickSound = LoadSound("sound/clickv2.wav");
     PlaySound(clickSound);
     int DeleteId = atoi(id);
     if (DeleteId) {
       int check = delete (DeleteId, &file);
 
       if (check) {
-        Sound clickSound = LoadSound("Sound/REALSUCCES.wav");
+        Sound clickSound = LoadSound("sound/REALSUCCES.wav");
         PlaySound(clickSound);
         deleteStatus = 1;   // Set status to successful
         deleteTimer = 0.0f; // Reset the timer
       } else {
-        Sound clickSound = LoadSound("Sound/wrong.wav");
+        Sound clickSound = LoadSound("sound/wrong.wav");
         PlaySound(clickSound);
         deleteStatus = 2;   // Set status to student doesn't exist
         deleteTimer = 0.0f; // Reset the timer
@@ -812,9 +812,9 @@ void search_visualisation(int blocNum, student std, bool active) {
   Rectangle rect2 = {775, 250, 25, 70};
   Rectangle srcRec2 = {rect2.x, rect2.y, rect2.width, rect2.height};
 
-  DrawTextureRec(resizedBackGround, srcRec1, (Vector2){rect1.x, rect1.y},
+  DrawTextureRec(resizedbackground, srcRec1, (Vector2){rect1.x, rect1.y},
                  WHITE);
-  DrawTextureRec(resizedBackGround, srcRec2, (Vector2){rect2.x, rect2.y},
+  DrawTextureRec(resizedbackground, srcRec2, (Vector2){rect2.x, rect2.y},
                  WHITE);
 }
 
@@ -862,19 +862,19 @@ int main() {
 
   // Set the custom font
   GuiSetFont(customFont);
-  Image icon = LoadImage("backGround/icon3.png");
+  Image icon = LoadImage("background/icon3.png");
 
   ImageResize(&icon, 50, 50);
 
   SetWindowIcon(icon);
 
-  Image backGround = LoadImage("BackGround/images.png");
+  Image background = LoadImage("background/images.png");
 
-  ImageResize(&backGround, 800, 450);
+  ImageResize(&background, 800, 450);
 
-  resizedBackGround = LoadTextureFromImage(backGround);
+  resizedbackground = LoadTextureFromImage(background);
 
-  UnloadImage(backGround);
+  UnloadImage(background);
 
   while (!WindowShouldClose()) {
 
@@ -886,7 +886,7 @@ int main() {
     // Draw
 
     BeginDrawing();
-    DrawTexture(resizedBackGround, 0, 0, WHITE);
+    DrawTexture(resizedbackground, 0, 0, WHITE);
 
     // Draw content based on the current page
     switch (currentPage) {
