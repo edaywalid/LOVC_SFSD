@@ -60,12 +60,12 @@ After building the project, you can run the executable to start the application.
 
 ## Project Structure
 
-    ├── BackGround
+    ├── backGround
     │   ├── ...
     ├── build
     │   ├── build.bat
     │   └── build.sh
-    ├── Debug
+    ├── debug
     │   └── myprogram.exe
     ├── fonts
     │   └── poppins
@@ -74,7 +74,7 @@ After building the project, you can run the executable to start the application.
     │   ├── raygui.h
     │   └── ...
     ├── README.md
-    ├── Sound
+    ├── sound
     │   └── ...
     ├── src
     │   ├── abstract.c
